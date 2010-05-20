@@ -1,0 +1,4 @@
+; $Id$
+name = Google Fonts
+description = Make use of Open Source fonts using the <a href="http://code.google.com/apis/webfonts/">Google Fonts API</a>
+core = 6.x

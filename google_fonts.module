@@ -1,0 +1,85 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * This is the file description for Google Fonts module.
+ *
+ * In this more verbose, multi-line description, you can specify what this
+ * file does exactly. Make sure to wrap your documentation in column 78 so
+ * that the file can be displayed nicely in default-sized consoles.
+ */
+
+/**
+ * Implementation of hook_menu().
+ */
+function google_fonts_menu() {
+  $items = array();
+
+  $items['admin/settings/google_fonts'] = array(
+    'title' => 'Google Fonts',
+    'description' => 'Select Google Fonts.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('google_fonts_admin_settings_form'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'google_fonts.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_init().
+ */
+function google_fonts_init() {
+  $fonts_to_load = array();
+  $used_fonts = variable_get('google_fonts_enabled_fonts', array());
+  foreach ($used_fonts as $font) {
+    if (!empty($font)) {
+      $fonts_to_load[] = _google_fonts_google_fontname($font);
+    }
+  }
+  drupal_add_link(array('type' => 'text/css', 'rel' => 'stylesheet', 'href' => 'http://fonts.googleapis.com/css?family=' . implode('|', $fonts_to_load)));
+}
+
+/**
+ * Return an array of available Google Fonts
+ * TODO: When it becomes available, fetch the current fonts using 
+ * an API call instead of hardcoding the font names
+ */
+function _google_fonts_available_fonts() {
+  return array(
+    'Cantarell',
+    'Cardo',
+    'Crimson Text',
+    'Droid Sans',
+    'Droid Sans Mono',
+    'Droid Serif',
+    'IM Fell',
+    'Inconsolata',
+    'Josefin Sans Std Light',
+    'Lobster',
+    'Molengo',
+    'Nobile',
+    'OFL Sorts Mill Goudy TT',
+    'Old Standard TT',
+    'Reenie Beanie',
+    'Tangerine',
+    'Vollkorn',
+    'Yanone Kaffeesatz',
+  );
+}
+
+/**
+ * Format the font name as saved in the database (underscores instead of spaces)
+ */
+function _google_fonts_system_fontname($string) {
+  return str_replace(' ', '_', $string);
+}
+
+/**
+ * Format the font name as used in the Google CSS call (plus-signs instead of spaces)
+ */
+function _google_fonts_google_fontname($string) {
+  return str_replace('_', '+', $string);
+}
