@@ -3,11 +3,12 @@
 
 /**
  * @file
- * This is the file description for Google Fonts module.
+ * This module enables Google Fonts on your website.
  *
- * In this more verbose, multi-line description, you can specify what this
- * file does exactly. Make sure to wrap your documentation in column 78 so
- * that the file can be displayed nicely in default-sized consoles.
+ * This module eanbles you to load fonts from the Google Fonts API
+ * within your website. After selecting which fonts you want to use 
+ * they will become available as working font-families in your CSS.
+ * Google Fonts will work on all modern browsers.
  */
 
 /**
@@ -18,11 +19,21 @@ function google_fonts_menu() {
 
   $items['admin/settings/google_fonts'] = array(
     'title' => 'Google Fonts',
-    'description' => 'Select Google Fonts.',
+    'description' => 'Select the Google Fonts you want to be available in your CSS.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('google_fonts_admin_settings_form'),
     'access arguments' => array('administer site configuration'),
     'file' => 'google_fonts.admin.inc',
+  );
+  
+  $items['admin/settings/google_fonts/select'] = array(
+    'title' => 'Google Fonts',
+    'description' => 'Select the Google Fonts to use.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('google_fonts_admin_settings_form'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'google_fonts.admin.inc',
+    'type' => DEFAULT_LOCAL_TASK,
   );
 
   return $items;
@@ -32,6 +43,11 @@ function google_fonts_menu() {
  * Implementation of hook_init().
  */
 function google_fonts_init() {
+  // We don't need to load the fonts twice as the admin interface
+  // loads ALL fonts by default already
+  if ($_GET['q'] == 'admin/settings/google_fonts') {
+    return;
+  }
   $fonts_to_load = array();
   $used_fonts = variable_get('google_fonts_enabled_fonts', array());
   foreach ($used_fonts as $font) {
@@ -39,6 +55,10 @@ function google_fonts_init() {
       $fonts_to_load[] = _google_fonts_google_fontname($font);
     }
   }
+  _google_fonts_load_css($fonts_to_load);
+}
+
+function _google_fonts_load_css($fonts_to_load) {
   drupal_add_link(array('type' => 'text/css', 'rel' => 'stylesheet', 'href' => 'http://fonts.googleapis.com/css?family=' . implode('|', $fonts_to_load)));
 }
 
@@ -55,7 +75,15 @@ function _google_fonts_available_fonts() {
     'Droid Sans',
     'Droid Sans Mono',
     'Droid Serif',
-    'IM Fell',
+    'IM Fell DW Pica',
+    'IM Fell DW Pica SC',
+    'IM Fell Double Pica',
+    'IM Fell Double Pica SC',
+    'IM Fell English',
+    'IM Fell English SC',
+    'IM Fell French Canon SC',
+    'IM Fell Great Primer',
+    'IM Fell Great Primer SC',
     'Inconsolata',
     'Josefin Sans Std Light',
     'Lobster',
