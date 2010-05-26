@@ -1,0 +1,6 @@
+; $Id$
+name = Google Fonts Ui
+description = "Provides an interface to add CSS dynamically"
+core = 6.x
+package = Google Fonts
+dependencies[] = google_fonts

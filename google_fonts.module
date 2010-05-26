@@ -27,13 +27,13 @@ function google_fonts_menu() {
   );
   
   $items['admin/settings/google_fonts/select'] = array(
-    'title' => 'Google Fonts',
+    'title' => 'Enable',
     'description' => 'Select the Google Fonts to use.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('google_fonts_admin_settings_form'),
     'access arguments' => array('administer site configuration'),
     'file' => 'google_fonts.admin.inc',
-    'type' => DEFAULT_LOCAL_TASK,
+    'type' => MENU_DEFAULT_LOCAL_TASK,
   );
 
   return $items;
