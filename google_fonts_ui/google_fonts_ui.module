@@ -34,9 +34,7 @@ function google_fonts_ui_menu() {
  * Implementation of hook_init().
  */
 function google_fonts_ui_init() {
-  if (is_file(file_directory_path() .'/google_fonts/google_fonts.css')) {
-    drupal_add_css(file_directory_path() .'/google_fonts/google_fonts.css');
-  }
+  drupal_add_css(_google_fonts_cache(variable_get("google_fonts_ui_css_contents", NULL)), 'theme');
 }
 
 /**

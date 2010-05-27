@@ -20,10 +20,10 @@ function google_fonts_ui_admin_settings_form(&$form_state) {
   $style_to_add = '<style type="text/css">.font_example label{ font-size: 30px; } ';
   foreach (variable_get('google_fonts_enabled_fonts', array()) as $font) {
     if ($font) {
-      $form[_google_fonts_system_fontname($font)] = array(
+      $form['google_fonts_ui_' . _google_fonts_system_fontname($font)] = array(
         '#type' => 'textarea',
         '#title' => str_replace('_', ' ', $font),
-        '#default_value' => variable_get(_google_fonts_system_fontname($font), NULL),
+        '#default_value' => variable_get('google_fonts_ui_' . _google_fonts_system_fontname($font), NULL),
         '#description' => 'Add one or more CSS selectors, one for each line.',
         '#prefix' => '<div class="font_example ' . _google_fonts_system_fontname($font) . '">',
         '#suffix' => '</div>',
@@ -53,13 +53,15 @@ function google_fonts_ui_admin_settings_form(&$form_state) {
 function google_fonts_ui_admin_settings_form_submit($form, &$form_state) {
   $css_value = '/* CSS code for the Google Fonts module */' . "\n\n";
   foreach (explode('|', $form['enabled_fonts']["#value"]) as $font) {
-    $selectors = $form[$font]["#value"];
+    $selectors = $form['google_fonts_ui_' . $font]["#value"];
     if (!empty($selectors)) {
       $selectors = check_plain(str_replace("\r\n", ",\r\n", trim($selectors)));
       $selectors = str_replace(',,', ',', $selectors);
       $css_value .= $selectors . '{ font-family: "' . $font . '"; }' . "\n\n";
     }
   }
+  
+  variable_set('google_fonts_ui_css_contents', $css_value);
   
   // Save the CSS code as local file
   if (!_google_fonts_cache($css_value, TRUE)) {
