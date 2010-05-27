@@ -65,6 +65,6 @@ function google_fonts_ui_admin_settings_form_submit($form, &$form_state) {
   
   // Save the CSS code as local file
   if (!_google_fonts_cache($css_value, TRUE)) {
-    drupal_set_message(t('Could not generate the CSS code for the Google Fonts.', 'error'));
+    drupal_set_message(t('Could not generate the CSS code for the Google Fonts.'), 'error');
   }
 }
