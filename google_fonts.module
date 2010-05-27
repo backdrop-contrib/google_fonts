@@ -5,10 +5,9 @@
  * @file
  * This module enables Google Fonts on your website.
  *
- * This module eanbles you to load fonts from the Google Fonts API
+ * This module enables you to load fonts from the Google Fonts API
  * within your website. After selecting which fonts you want to use 
  * they will become available as working font-families in your CSS.
- * Google Fonts will work on all modern browsers.
  */
 
 /**
@@ -58,6 +57,9 @@ function google_fonts_init() {
   _google_fonts_load_css($fonts_to_load);
 }
 
+/**
+ * Add the CSS include to the HEAD of the page
+ */
 function _google_fonts_load_css($fonts_to_load) {
   drupal_add_link(array('type' => 'text/css', 'rel' => 'stylesheet', 'href' => 'http://fonts.googleapis.com/css?family=' . implode('|', $fonts_to_load)));
 }
