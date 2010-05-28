@@ -42,11 +42,13 @@ function google_fonts_menu() {
  * Implementation of hook_init().
  */
 function google_fonts_init() {
+  
   // We don't need to load the fonts twice as the admin interface
   // loads ALL fonts by default already
   if ($_GET['q'] == 'admin/settings/google_fonts') {
     return;
   }
+  
   $fonts_to_load = array();
   $used_fonts = variable_get('google_fonts_enabled_fonts', array());
   foreach ($used_fonts as $font) {
@@ -54,7 +56,10 @@ function google_fonts_init() {
       $fonts_to_load[] = _google_fonts_google_fontname($font);
     }
   }
-  _google_fonts_load_css($fonts_to_load);
+  
+  if (!empty($fonts_to_load)) {
+    _google_fonts_load_css($fonts_to_load);
+  }
 }
 
 /**
