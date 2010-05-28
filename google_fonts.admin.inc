@@ -24,7 +24,7 @@ function google_fonts_admin_settings_form(&$form_state) {
   /* Load all fonts in CSS to display their example */
   $style_to_add = '#google-fonts-admin-settings-form .form-item{ margin-bottom: 20px; } span.font_example { font-size: 30px; vertical-align: middle; }';
   foreach (_google_fonts_available_fonts() as $font) {
-    $fonts_to_load[] = _google_fonts_google_fontname($font);
+    $fonts_to_load[] = _google_fonts_google_fontname(_google_fonts_system_fontname($font));
     $style_to_add .= '.' . _google_fonts_system_fontname($font) . '{ font-family: "' . $font . '"; } ';
   }
   

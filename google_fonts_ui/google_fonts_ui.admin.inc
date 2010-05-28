@@ -16,7 +16,6 @@ function google_fonts_ui_admin_settings_form(&$form_state) {
     '#markup' => t('For each enabled font you can add one or more rules.<br />Examples given: <code>.node H2</code> or <code>#logo-floater h1</code>'),
   );
   $fonts_to_load = array();
-  $fonts_to_save = array();
   $style_to_add = '.font_example label{ font-size: 30px; } ';
   foreach (variable_get('google_fonts_enabled_fonts') as $font) {
     if ($font) {
