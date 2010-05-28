@@ -34,7 +34,7 @@ function google_fonts_admin_settings_form(&$form_state) {
   $form['google_fonts_enabled_fonts'] = array(
     '#type' => 'checkboxes',
     '#title' => t('Enabled Google Fonts'),
-    '#default_value' => variable_get('google_fonts_enabled_fonts', array()),
+    '#default_value' => variable_get('google_fonts_enabled_fonts'),
     '#options' => $available_fonts,
     '#description' => t('After saving you can use the enabled fonts in your stylesheet.<br />Example: <code>.node h2{ font-family: "Josefin Sans Std Light"; }</code>'),
   );

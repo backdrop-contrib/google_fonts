@@ -50,7 +50,7 @@ function google_fonts_init() {
   }
   
   $fonts_to_load = array();
-  $used_fonts = variable_get('google_fonts_enabled_fonts', array());
+  $used_fonts = variable_get('google_fonts_enabled_fonts');
   foreach ($used_fonts as $font) {
     if (!empty($font)) {
       $fonts_to_load[] = _google_fonts_google_fontname($font);

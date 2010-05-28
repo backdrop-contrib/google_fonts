@@ -34,7 +34,7 @@ function google_fonts_ui_menu() {
  * Implementation of hook_init().
  */
 function google_fonts_ui_init() {
-  drupal_add_css(_google_fonts_cache(variable_get("google_fonts_ui_css_contents", NULL)), 'theme');
+  drupal_add_css(_google_fonts_cache(variable_get("google_fonts_ui_css_contents")), 'theme');
 }
 
 /**

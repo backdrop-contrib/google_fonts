@@ -17,13 +17,13 @@ function google_fonts_ui_admin_settings_form(&$form_state) {
   );
   $fonts_to_load = array();
   $fonts_to_save = array();
-  $style_to_add = '<style type="text/css">.font_example label{ font-size: 30px; } ';
-  foreach (variable_get('google_fonts_enabled_fonts', array()) as $font) {
+  $style_to_add = '.font_example label{ font-size: 30px; } ';
+  foreach (variable_get('google_fonts_enabled_fonts') as $font) {
     if ($font) {
       $form['google_fonts_ui_' . _google_fonts_system_fontname($font)] = array(
         '#type' => 'textarea',
         '#title' => str_replace('_', ' ', $font),
-        '#default_value' => variable_get('google_fonts_ui_' . _google_fonts_system_fontname($font), NULL),
+        '#default_value' => variable_get('google_fonts_ui_' . _google_fonts_system_fontname($font)),
         '#description' => 'Add one or more CSS selectors, one for each line.',
         '#prefix' => '<div class="font_example ' . _google_fonts_system_fontname($font) . '">',
         '#suffix' => '</div>',
@@ -34,7 +34,6 @@ function google_fonts_ui_admin_settings_form(&$form_state) {
       $style_to_add .= '.' . _google_fonts_system_fontname($font) . ' label{ font-family: "' . $font . '"; } ';
     }
   }
-  $style_to_add .= '</style>';
   
   $form['enabled_fonts'] = array(
     '#type' => 'hidden',
@@ -43,7 +42,7 @@ function google_fonts_ui_admin_settings_form(&$form_state) {
   
   $form['#submit'][] = 'google_fonts_ui_admin_settings_form_submit';
   
-  drupal_add_html_head($style_to_add);
+  drupal_add_css($style_to_add, array('type' => 'inline'));
   return system_settings_form($form);
 }
 
