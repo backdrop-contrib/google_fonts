@@ -1,6 +1,9 @@
 ; $Id$
 name = Google Fonts Ui
 description = "Provides an interface to apply Google Fonts using CSS selectors"
-core = 6.x
+core = 7.x
 package = Google Fonts
 dependencies[] = google_fonts
+files[] = google_fonts_ui.module
+files[] = google_fonts_ui.admin.inc
+files[] = google_fonts_ui.install

@@ -11,12 +11,12 @@
  */
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  */
 function google_fonts_menu() {
   $items = array();
 
-  $items['admin/settings/google_fonts'] = array(
+  $items['admin/config/system/google_fonts'] = array(
     'title' => 'Google Fonts',
     'description' => 'Select the Google Fonts you want to be available in your CSS.',
     'page callback' => 'drupal_get_form',
@@ -25,7 +25,7 @@ function google_fonts_menu() {
     'file' => 'google_fonts.admin.inc',
   );
   
-  $items['admin/settings/google_fonts/select'] = array(
+  $items['admin/config/system/google_fonts/select'] = array(
     'title' => 'Enable',
     'description' => 'Select the Google Fonts to use.',
     'page callback' => 'drupal_get_form',
@@ -39,7 +39,7 @@ function google_fonts_menu() {
 }
 
 /**
- * Implementation of hook_init().
+ * Implements hook_init().
  */
 function google_fonts_init() {
   
@@ -66,7 +66,8 @@ function google_fonts_init() {
  * Add the CSS include to the HEAD of the page
  */
 function _google_fonts_load_css($fonts_to_load) {
-  drupal_add_link(array('type' => 'text/css', 'rel' => 'stylesheet', 'href' => 'http://fonts.googleapis.com/css?family=' . implode('|', $fonts_to_load)));
+  
+  drupal_add_css('http://fonts.googleapis.com/css?family=' . implode('|', $fonts_to_load), array('type' => 'external', 'weight' => CSS_SYSTEM));
 }
 
 /**

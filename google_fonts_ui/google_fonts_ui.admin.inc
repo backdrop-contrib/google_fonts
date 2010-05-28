@@ -13,7 +13,7 @@ function google_fonts_ui_admin_settings_form(&$form_state) {
   $form = array();
   
   $form['introduction'] = array(
-    '#value' => t('For each enabled font you can add one or more rules.<br />Examples given: <code>.node H2</code> or <code>#logo-floater h1</code>'),
+    '#markup' => t('For each enabled font you can add one or more rules.<br />Examples given: <code>.node H2</code> or <code>#logo-floater h1</code>'),
   );
   $fonts_to_load = array();
   $fonts_to_save = array();
@@ -43,7 +43,7 @@ function google_fonts_ui_admin_settings_form(&$form_state) {
   
   $form['#submit'][] = 'google_fonts_ui_admin_settings_form_submit';
   
-  drupal_set_html_head($style_to_add);
+  drupal_add_html_head($style_to_add);
   return system_settings_form($form);
 }
 
@@ -57,7 +57,7 @@ function google_fonts_ui_admin_settings_form_submit($form, &$form_state) {
     if (!empty($selectors)) {
       $selectors = check_plain(str_replace("\r\n", ",\r\n", trim($selectors)));
       $selectors = str_replace(',,', ',', $selectors);
-      $css_value .= $selectors . '{ font-family: "' . $font . '"; }' . "\n\n";
+      $css_value .= $selectors . '{ font-family: "' . str_replace('_', ' ', $font) . '"; }' . "\n\n";
     }
   }
   
