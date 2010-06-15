@@ -17,7 +17,7 @@ function google_fonts_ui_admin_settings_form(&$form_state) {
   );
   $fonts_to_load = array();
   $style_to_add = '.font_example label{ font-size: 30px; } ';
-  foreach (variable_get('google_fonts_enabled_fonts') as $font) {
+  foreach (variable_get('google_fonts_enabled_fonts', array()) as $font) {
     if ($font) {
       $form['google_fonts_ui_' . _google_fonts_system_fontname($font)] = array(
         '#type' => 'textarea',
@@ -30,7 +30,7 @@ function google_fonts_ui_admin_settings_form(&$form_state) {
       );
       
       $fonts_to_load[] = _google_fonts_system_fontname($font);
-      $style_to_add .= '.' . _google_fonts_system_fontname($font) . ' label{ font-family: "' . $font . '"; } ';
+      $style_to_add .= '.' . _google_fonts_system_fontname($font) . ' label{ font-family: "' . str_replace('_', ' ', $font) . '"; } ';
     }
   }
   
