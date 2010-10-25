@@ -17,19 +17,22 @@ function google_fonts_admin_settings_form(&$form_state) {
   );
   
   $available_fonts = array();
-  foreach (_google_fonts_available_fonts() as $font) {
-    $available_fonts[_google_fonts_system_fontname($font)] = '<span class="font_example ' . _google_fonts_system_fontname($font) . '">' . $font . '</span>';
+  foreach (_google_fonts_available_fonts() as $font_family => $fonts) {
+    foreach ($fonts['fonts'] as $font_name => $font_info) {
+      $available_fonts[$font_name] = '<span class="font_example ' .  _google_fonts_path_to_classname($font_info['path']) . '">' . $font_name . '</span>';
+    } 
   }
   
   /* Load all fonts in CSS to display their example */
-  $style_to_add = '#google-fonts-admin-settings-form .form-item{ margin-bottom: 20px; } span.font_example { font-size: 30px; vertical-align: middle; }';
-  foreach (_google_fonts_available_fonts() as $font) {
-    $fonts_to_load[] = _google_fonts_google_fontname(_google_fonts_system_fontname($font));
-    $style_to_add .= '.' . _google_fonts_system_fontname($font) . '{ font-family: "' . $font . '"; } ';
+  $style_to_add = '#google-fonts-admin-settings-form .form-item{ margin-bottom: 20px; } span.font_example { font-size: 30px; vertical-align: middle; }' . PHP_EOL;
+  foreach (_google_fonts_available_fonts() as $font_family => $fonts) {
+    foreach ($fonts['fonts'] as $font_name => $font_info) {
+      $fonts_to_load[] = $font_info['path'];
+      $style_to_add .= '.' . _google_fonts_path_to_classname($font_info['path']) . '{ font-family: "' . $font_info['family'] . '"; font-style: ' . $font_info['style'] . '; font-weight: ' . $font_info['weight'] . '; } ' . PHP_EOL;
+    }
   }
-  
   _google_fonts_load_css($fonts_to_load);
-  drupal_add_css($style_to_add, array('type' => 'inline'));
+  drupal_add_css($style_to_add, 'inline');
   
   $form['google_fonts_enabled_fonts'] = array(
     '#type' => 'checkboxes',

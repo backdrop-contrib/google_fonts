@@ -11,7 +11,7 @@
  */
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  */
 function google_fonts_ui_menu() {
   $items = array();
@@ -31,29 +31,27 @@ function google_fonts_ui_menu() {
 }
 
 /** 
- * Implementation of hook_init().
+ * Implements hook_init() to load the Google Fonts UI css file.
  */
 function google_fonts_ui_init() {
-  drupal_add_css(_google_fonts_cache(variable_get("google_fonts_ui_css_contents")), 'theme');
+  drupal_add_css(_google_fonts_cache(variable_get("google_fonts_ui_css_contents")));
 }
 
 /**
  * Create the CSS file and store it locally.
- * @param $file_contents
- *   The contents of the CSS file
  */
 function _google_fonts_cache($file_contents, $reset = FALSE) {
   
-  $directory = 'public://google_fonts';
+  $directory = file_build_uri('google_fonts');
   $file_destination = $directory . '/google_fonts.css';
   
   if (!file_exists($file_destination) || $reset) {
     // Check that the files directory is writable
     if (file_prepare_directory($directory, FILE_CREATE_DIRECTORY)) {
-      return file_unmanaged_save_data($file_contents, $directory . '/google_fonts.css', FILE_EXISTS_REPLACE);
+      return file_unmanaged_save_data($file_contents, $file_destination, FILE_EXISTS_REPLACE);
     }
   }
   else {
-    return $file_destination;
+    return file_create_url($file_destination);
   }
 }
