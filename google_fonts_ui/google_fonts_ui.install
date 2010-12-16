@@ -10,7 +10,7 @@
  * Delete settings variable
  */
 function google_fonts_ui_uninstall() {
-  foreach (variable_get('google_fonts_enabled_fonts') as $font) {
+  foreach (variable_get('google_fonts_enabled_fonts', array()) as $font) {
     if ($font) {
       variable_del('google_fonts_ui_' . _google_fonts_system_fontname($font));
     }
