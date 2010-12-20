@@ -26,7 +26,7 @@ function google_fonts_ui_admin_settings_form(&$form_state) {
   
   $fonts_to_load = array();
   $style_to_add = 'form .font_example label{ font-size: 30px; } ';
-  foreach (variable_get('google_fonts_enabled_fonts') as $font) {
+  foreach (variable_get('google_fonts_enabled_fonts', array()) as $font) {
     if ($font) {
       $font_info = _google_fonts_get_font_info($font);
       $form['google_fonts_ui_' . _google_fonts_system_fontname($font)] = array(
