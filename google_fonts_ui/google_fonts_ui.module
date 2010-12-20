@@ -34,7 +34,7 @@ function google_fonts_ui_menu() {
  * Implements hook_init() to load the Google Fonts UI css file.
  */
 function google_fonts_ui_init() {
-  drupal_add_css(_google_fonts_cache(variable_get("google_fonts_ui_css_contents")));
+  drupal_add_css(_google_fonts_cache(variable_get("google_fonts_ui_css_contents")), array('type' => 'file', 'every_page' => TRUE, 'group' => CSS_THEME));
 }
 
 /**
@@ -52,6 +52,6 @@ function _google_fonts_cache($file_contents, $reset = FALSE) {
     }
   }
   else {
-    return file_create_url($file_destination);
+    return $file_destination;
   }
 }
