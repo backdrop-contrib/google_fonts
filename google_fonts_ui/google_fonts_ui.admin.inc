@@ -9,13 +9,13 @@
 /**
  * Implements hook_admin_settings() for configuring the module
  */
-function google_fonts_ui_admin_settings_form(&$form_state) {
+function google_fonts_ui_admin_settings_form($form, &$form_state) {
   $form = array();
   $enabled_fonts = variable_get('google_fonts_enabled_fonts', array());
   
   if (empty($enabled_fonts)) {
     $form['introduction'] = array(
-      '#markup' => t('You have not enabled any fonts. Please do this first, before you can apply any CSS rules.'),
+      '#markup' => t('You have not enabled any fonts. Please <a href="@link">do this first</a>, before you can apply any CSS rules.', array('@link' => url("admin/config/system/google_fonts"))),
     );
     return $form;
   }

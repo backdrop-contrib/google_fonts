@@ -9,7 +9,7 @@
 /**
  * Implements hook_admin_settings() for configuring the module
  */
-function google_fonts_admin_settings_form(&$form_state) {
+function google_fonts_admin_settings_form($form, &$form_state) {
 
   $form = array();
   $form['introduction'] = array(
@@ -24,7 +24,7 @@ function google_fonts_admin_settings_form(&$form_state) {
   }
   
   /* Load all fonts in CSS to display their example */
-  $style_to_add = '#google-fonts-admin-settings-form .form-item{ margin-bottom: 20px; } span.font_example { font-size: 30px; vertical-align: middle; }' . PHP_EOL;
+  $style_to_add = '#google-fonts-admin-settings-form .form-item{ margin-bottom: 20px; } span.font_example { font-size: 30px; vertical-align: middle; cursor: pointer; }' . PHP_EOL;
   foreach (_google_fonts_available_fonts() as $font_family => $fonts) {
     foreach ($fonts['fonts'] as $font_name => $font_info) {
       $fonts_to_load[] = $font_info['path'];
