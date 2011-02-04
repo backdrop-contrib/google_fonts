@@ -90,6 +90,11 @@ function _google_fonts_available_fonts() {
     'name' => 'Apache License, version 2.0',
     'url' => 'http://www.apache.org/licenses/LICENSE-2.0.html',
   );
+  
+  $ubuntu_license = array(
+    'name' => 'Ubuntu Font License, 1.0',
+    'url' => 'http://font.ubuntu.com/ufl/',
+  );
 
   return array(
     'Allan' => array(
@@ -234,8 +239,44 @@ function _google_fonts_available_fonts() {
           'family' => 'Bentham',
           'path' => 'Bentham',
           'style' => 'normal',
-          'weight' => 'bold',
+          'weight' => 'normal',
           'license' => $sil_license,
+        ),
+      ),
+    ),
+    'Buda' => array(
+      'path' => 'Buda',
+      'fonts' => array(
+        'Buda' => array(
+          'family' => 'Buda',
+          'path' => 'Buda:light',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $sil_license,
+        ),
+      ),
+    ),
+    'Cabin' => array(
+      'path' => 'Cabin',
+      'fonts' => array(
+        'Cabin' => array(
+          'family' => 'Cabin',
+          'path' => 'Cabin:bold',
+          'style' => 'bold',
+          'weight' => 'normal',
+          'license' => $sil_license,
+        ),
+      ),
+    ),
+    'Calligraffitti' => array(
+      'path' => 'Calligraffitti',
+      'fonts' => array(
+        'Calligraffitti' => array(
+          'family' => 'Calligraffitti',
+          'path' => 'Calligraffitti',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $apache_license,
         ),
       ),
     ),
@@ -284,6 +325,30 @@ function _google_fonts_available_fonts() {
         ),
       ),
     ),
+    'Cherry Cream Soda' => array(
+      'path' => 'Cherry+Cream+Soda',
+      'fonts' => array(
+        'Cherry Cream Soda' => array(
+          'family' => 'Cherry Cream Soda',
+          'path' => 'Cherry+Cream+Soda',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $apache_license,
+        ),
+      ),
+    ),
+    'Chewy' => array(
+      'path' => 'Chewy',
+      'fonts' => array(
+        'Chewy' => array(
+          'family' => 'Chewy',
+          'path' => 'Chewy',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $apache_license,
+        ),
+      ),
+    ),
     'Coda' => array(
       'path' => 'Coda',
       'fonts' => array(
@@ -291,6 +356,42 @@ function _google_fonts_available_fonts() {
           'family' => 'Coda',
           'path' => 'Coda:800',
           'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $sil_license,
+        ),
+      ),
+    ),
+    'Coming Soon' => array(
+      'path' => 'Coming+Soon',
+      'fonts' => array(
+        'Coming+Soon' => array(
+          'family' => 'Coming Soon',
+          'path' => 'Coming+Soon',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $apache_license,
+        ),
+      ),
+    ),
+    'Copse' => array(
+      'path' => 'Copse',
+      'fonts' => array(
+        'Copse' => array(
+          'family' => 'Copse',
+          'path' => 'Copse',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $sil_license,
+        ),
+      ),
+    ),
+    'Corben' => array(
+      'path' => 'Corben',
+      'fonts' => array(
+        'Corben' => array(
+          'family' => 'Corben',
+          'path' => 'Corben:bold',
+          'style' => 'bold',
           'weight' => 'normal',
           'license' => $sil_license,
         ),
@@ -341,6 +442,18 @@ function _google_fonts_available_fonts() {
         ),
       ),
     ),
+    'Crafty Girls' => array(
+      'path' => 'Crafty+Girls',
+      'fonts' => array(
+        'Crafty Girls' => array(
+          'family' => 'Crafty Girls',
+          'path' => 'Crafty+Girls',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $apache_license,
+        ),
+      ),
+    ),
     'Crimson Text' => array(
       'path' => 'Crimson+Text',
       'fonts' => array(
@@ -353,12 +466,36 @@ function _google_fonts_available_fonts() {
         ),
       ),
     ),
+    'Crushed' => array(
+      'path' => 'Crushed',
+      'fonts' => array(
+        'Crushed' => array(
+          'family' => 'Crushed',
+          'path' => 'Crushed',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $apache_license,
+        ),
+      ),
+    ),
     'Cuprum' => array(
       'path' => 'Cuprum',
       'fonts' => array(
         'Cuprum' => array(
           'family' => 'Cuprum',
           'path' => 'Cuprum',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $sil_license,
+        ),
+      ),
+    ),
+    'Dancing Script' => array(
+      'path' => 'Dancing+Script',
+      'fonts' => array(
+        'Dancing Script' => array(
+          'family' => 'Dancing Script',
+          'path' => 'Dancing+Script',
           'style' => 'normal',
           'weight' => 'normal',
           'license' => $sil_license,
@@ -429,6 +566,18 @@ function _google_fonts_available_fonts() {
         ),
       ),
     ),
+    'Fontdiner Swanky' => array(
+      'path' => 'Fontdiner+Swanky',
+      'fonts' => array(
+        'Fontdiner Swanky' => array(
+          'family' => 'Fontdiner Swanky',
+          'path' => 'Fontdiner+Swanky',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $apache_license,
+        ),
+      ),
+    ),
     'Geo' => array(
       'path' => 'Geo',
       'fonts' => array(
@@ -438,6 +587,30 @@ function _google_fonts_available_fonts() {
           'style' => 'normal',
           'weight' => 'normal',
           'license' => $sil_license,
+        ),
+      ),
+    ),
+    'Gruppo' => array(
+      'path' => 'Gruppo',
+      'fonts' => array(
+        'Gruppo' => array(
+          'family' => 'Gruppo',
+          'path' => 'Gruppo',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $sil_license,
+        ),
+      ),
+    ),
+    'Homemade Apple' => array(
+      'path' => 'Homemade+Apple',
+      'fonts' => array(
+        'Homemade Apple' => array(
+          'family' => 'Homemade Apple',
+          'path' => 'Homemade+Apple',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $apache_license,
         ),
       ),
     ),
@@ -560,6 +733,18 @@ function _google_fonts_available_fonts() {
           'style' => 'normal',
           'weight' => 'normal',
           'license' => $sil_license,
+        ),
+      ),
+    ),
+    'Irish Growler' => array(
+      'path' => 'Irish+Growler',
+      'fonts' => array(
+        'Irish Growler' => array(
+          'family' => 'Irish Growler',
+          'path' => 'Irish+Growler',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $apache_license,
         ),
       ),
     ),
@@ -713,6 +898,18 @@ function _google_fonts_available_fonts() {
         ),
       ),
     ),
+    'Just Another Hand' => array(
+      'path' => 'Just+Another+Hand',
+      'fonts' => array(
+        'Just Another Hand' => array(
+          'family' => 'Just Another Hand',
+          'path' => 'Just+Another+Hand',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $apache_license,
+        ),
+      ),
+    ),
     'Just Me Again Down Here' => array(
       'path' => 'Just+Me+Again+Down+Here',
       'fonts' => array(
@@ -731,6 +928,56 @@ function _google_fonts_available_fonts() {
         'Kenia' => array(
           'family' => 'Kenia',
           'path' => 'Kenia',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $sil_license,
+        ),
+      ),
+    ),
+    'Kranky' => array(
+      'path' => 'Kranky',
+      'fonts' => array(
+        'Kranky' => array(
+          'family' => 'Kranky',
+          'path' => 'Kranky',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $apache_license,
+        ),
+      ),
+    ),
+    'Kreon' => array(
+      'path' => 'Kreon',
+      'fonts' => array(
+        'Kreon' => array(
+          'family' => 'Kreon',
+          'path' => 'Kreon',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $sil_license,
+        ),
+        'Kreon light' => array(
+          'family' => 'Kreon',
+          'path' => 'Kreon:light',
+          'style' => 'normal',
+          'weight' => 'light',
+          'license' => $sil_license,
+        ),
+        'Kreon bold' => array(
+          'family' => 'Kreon',
+          'path' => 'Kreon:bold',
+          'style' => 'normal',
+          'weight' => 'bold',
+          'license' => $sil_license,
+        ),
+      ),
+    ),
+    'Kristi' => array(
+      'path' => 'Kristi',
+      'fonts' => array(
+        'Kristi' => array(
+          'family' => 'Kristi',
+          'path' => 'Kristi',
           'style' => 'normal',
           'weight' => 'normal',
           'license' => $sil_license,
@@ -812,12 +1059,86 @@ function _google_fonts_available_fonts() {
         ),
       ),
     ),
+    'Lekton' => array(
+      'path' => 'Lekton',
+      'fonts' => array(
+        'Lekton' => array(
+          'family' => 'Lekton',
+          'path' => 'Lekton',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $sil_license,
+        ),
+        'Lekton italic' => array(
+          'family' => 'Lekton',
+          'path' => 'Lekton:italic',
+          'style' => 'italic',
+          'weight' => 'normal',
+          'license' => $sil_license,
+        ),
+        'Lekton bold' => array(
+          'family' => 'Lekton',
+          'path' => 'Lekton:bold',
+          'style' => 'normal',
+          'weight' => 'bold',
+          'license' => $sil_license,
+        ),
+      ),
+    ),
     'Lobster' => array(
       'path' => 'Lobster',
       'fonts' => array(
         'Lobster' => array(
           'family' => 'Lobster',
           'path' => 'Lobster',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $sil_license,
+        ),
+      ),
+    ),
+    'Luckiest Guy' => array(
+      'path' => 'Luckiest+Guy',
+      'fonts' => array(
+        'Luckiest Guy' => array(
+          'family' => 'Luckiest Guy',
+          'path' => 'Luckiest+Guy',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $apache_license,
+        ),
+      ),
+    ),
+    'Maiden Orange' => array(
+      'path' => 'Maiden+Orange',
+      'fonts' => array(
+        'Maiden Orange' => array(
+          'family' => 'Maiden Orange',
+          'path' => 'Maiden+Orange',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $apache_license,
+        ),
+      ),
+    ),
+    'Meddon' => array(
+      'path' => 'Meddon',
+      'fonts' => array(
+        'Meddon' => array(
+          'family' => 'Meddon',
+          'path' => 'Meddon',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $sil_license,
+        ),
+      ),
+    ),
+    'Merriweather' => array(
+      'path' => 'Merriweather',
+      'fonts' => array(
+        'Merriweather' => array(
+          'family' => 'Merriweather',
+          'path' => 'Merriweather',
           'style' => 'normal',
           'weight' => 'normal',
           'license' => $sil_license,
@@ -1044,6 +1365,18 @@ function _google_fonts_available_fonts() {
         ),
       ),
     ),
+    'Permanent Marker' => array(
+      'path' => 'Permanent+Marker',
+      'fonts' => array(
+        'Permanent Marker' => array(
+          'family' => 'Permanent Marker',
+          'path' => 'Permanent+Marker',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $apache_license,
+        ),
+      ),
+    ),
     'Philosopher' => array(
       'path' => 'Philosopher',
       'fonts' => array(
@@ -1089,6 +1422,18 @@ function _google_fonts_available_fonts() {
         ),
       ),
     ),
+    'Radley' => array(
+      'path' => 'Radley',
+      'fonts' => array(
+        'Radley' => array(
+          'family' => 'Radley',
+          'path' => 'Radley',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $sil_license,
+        ),
+      ),
+    ),
     'Raleway' => array(
       'path' => 'Raleway',
       'fonts' => array(
@@ -1113,6 +1458,42 @@ function _google_fonts_available_fonts() {
         ),
       ),
     ),
+    'Rock Salt' => array(
+      'path' => 'Rock+Salt',
+      'fonts' => array(
+        'Rock Salt' => array(
+          'family' => 'Rock Salt',
+          'path' => 'Rock+Salt',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $apache_license,
+        ),
+      ),
+    ),
+    'Schoolbell' => array(
+      'path' => 'Schoolbell',
+      'fonts' => array(
+        'Schoolbell' => array(
+          'family' => 'Schoolbell',
+          'path' => 'Schoolbell',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $apache_license,
+        ),
+      ),
+    ),
+    'Slackey' => array(
+      'path' => 'Slackey',
+      'fonts' => array(
+        'Slackey' => array(
+          'family' => 'Slackey',
+          'path' => 'Slackey',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $apache_license,
+        ),
+      ),
+    ),
     'Sniglet' => array(
       'path' => 'Sniglet',
       'fonts' => array(
@@ -1122,6 +1503,18 @@ function _google_fonts_available_fonts() {
           'style' => 'normal',
           'weight' => '800',
           'license' => $sil_license,
+        ),
+      ),
+    ),
+    'Sunshiney' => array(
+      'path' => 'Sunshiney',
+      'fonts' => array(
+        'Sunshiney' => array(
+          'family' => 'Sunshiney',
+          'path' => 'Sunshiney',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $apache_license,
         ),
       ),
     ),
@@ -1189,6 +1582,39 @@ function _google_fonts_available_fonts() {
         ),
       ),
     ),
+    'Ubuntu' => array(
+      'path' => 'Ubuntu',
+      'fonts' => array(
+        'Ubuntu' => array(
+          'family' => 'Ubuntu',
+          'path' => 'Ubuntu',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $ubuntu_license,
+        ),
+        'Ubuntu italic' => array(
+          'family' => 'Ubuntu',
+          'path' => 'Ubuntu:italic',
+          'style' => 'italic',
+          'weight' => 'normal',
+          'license' => $ubuntu_license,
+        ),
+        'Ubuntu bold' => array(
+          'family' => 'Ubuntu',
+          'path' => 'Ubuntu:bold',
+          'style' => 'normal',
+          'weight' => 'bold',
+          'license' => $ubuntu_license,
+        ),
+        'Ubuntu bold italic' => array(
+          'family' => 'Ubuntu',
+          'path' => 'Ubuntu:bolditalic',
+          'style' => 'italic',
+          'weight' => 'bold',
+          'license' => $ubuntu_license,
+        ),
+      ),
+    ),
     'UnifrakturCook' => array(
       'path' => 'UnifrakturCook',
       'fonts' => array(
@@ -1210,6 +1636,18 @@ function _google_fonts_available_fonts() {
           'style' => 'normal',
           'weight' => 'normal',
           'license' => $sil_license,
+        ),
+      ),
+    ),
+    'Unkempt' => array(
+      'path' => 'Unkempt',
+      'fonts' => array(
+        'Unkempt' => array(
+          'family' => 'Unkempt',
+          'path' => 'Unkempt',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $apache_license,
         ),
       ),
     ),
@@ -1255,6 +1693,18 @@ function _google_fonts_available_fonts() {
           'style' => 'italic',
           'weight' => 'bold',
           'license' => $sil_license,
+        ),
+      ),
+    ),
+    'Walter Turncoat' => array(
+      'path' => 'Walter+Turncoat',
+      'fonts' => array(
+        'Walter Turncoat' => array(
+          'family' => 'Walter Turncoat',
+          'path' => 'Walter+Turncoat',
+          'style' => 'normal',
+          'weight' => 'normal',
+          'license' => $apache_license,
         ),
       ),
     ),

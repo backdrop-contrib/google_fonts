@@ -19,7 +19,7 @@ function google_fonts_admin_settings_form($form, &$form_state) {
   $available_fonts = array();
   foreach (_google_fonts_available_fonts() as $font_family => $fonts) {
     foreach ($fonts['fonts'] as $font_name => $font_info) {
-      $available_fonts[$font_name] = '<span class="font_example ' .  _google_fonts_path_to_classname($font_info['path']) . '">' . $font_name . '</span>';
+      $available_fonts[$font_name] = '<span class="font_example ' . _google_fonts_path_to_classname($font_info['path']) . '">' . $font_name . '</span>';
     } 
   }
   
