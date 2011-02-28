@@ -69,6 +69,7 @@ function google_fonts_ui_admin_settings_form_submit($form, &$form_state) {
   }
   
   variable_set('google_fonts_ui_css_contents', $css_value);
+  cache_clear_all();
   
   // Save the CSS code as local file
   if (!_google_fonts_cache($css_value, TRUE)) {
