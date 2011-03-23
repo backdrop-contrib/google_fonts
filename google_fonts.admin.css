@@ -1,0 +1,49 @@
+.google_fonts_admin_form .enabled_fonts .form-textarea {
+  width: auto;
+}
+.google_fonts_admin_form .enabled_fonts .form-type-checkbox,
+.google_fonts_admin_form .enabled_fonts .form-type-radio {
+  display: inline;
+  padding-right: 1em;
+}
+.google_fonts_admin_form .disabled_fonts .form-item { 
+  margin-bottom: 20px; 
+}
+.google_fonts_admin_form .font_example{ 
+  font-size: 30px;
+  vertical-align: middle; 
+  padding-left:10px; 
+}
+.google_fonts_admin_form .enabled_fonts .font_example {
+  float: right;
+  font-size: 50px;
+  margin-right: 5px;
+}
+.google_fonts_admin_form .disabled_fonts .font_example {
+  cursor: pointer;  
+}
+
+.google_fonts_admin_form span.variants,
+.google_fonts_admin_form span.subsets {
+  vertical-align: middle;
+  margin-left: 10px;
+  padding: 3px 5px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.google_fonts_admin_form span.variants {
+  background-color: #888;
+  color: #ccc;
+}
+.google_fonts_admin_form span.variants span{
+  font-weight: bold;
+  color: #fff;  
+}
+.google_fonts_admin_form span.subsets {
+  background-color: #ccc;
+  color: #555;
+}
+.google_fonts_admin_form span.subsets span {
+  font-weight: bold;
+  color: #000;
+}
