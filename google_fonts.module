@@ -23,6 +23,13 @@ function google_fonts_menu() {
     'access arguments' => array('administer site configuration'),
     'file' => 'google_fonts.admin.inc',
   );
+  
+  $items['admin/config/system/google_fonts/update'] = array(
+    'title' => 'Update Google Fonts list',
+    'page callback' => '_google_fonts_update_font_list',
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_CALLBACK,
+  );
 
   return $items;
 }
@@ -47,9 +54,10 @@ function google_fonts_init() {
   if (!empty($used_fonts) && !isset($used_fonts[0]) && user_access('administer software updates')) {
     drupal_set_message(t('You have not updated your Google Fonts module yet. Please run the database update script.'), 'error');
   }
-
   foreach ($enabled_fonts as $font) { 
-    $fonts_to_load[] = _google_fonts_family_pathname($font['family'], $font['variants'], $font['subsets']);
+    $variants = empty($font['variants']) ? NULL : $font['variants'];
+    $subsets = empty($font['subsets']) ? NULL : $font['subsets'];
+    $fonts_to_load[] = _google_fonts_family_pathname($font['family'], $variants, $subsets);
   }
   if (!empty($fonts_to_load)) {
     _google_fonts_load_css($fonts_to_load, 1);
@@ -57,14 +65,9 @@ function google_fonts_init() {
 }
 
 function _google_fonts_add_custom_css() {
-  // Fetch the CSS code to be created
-  $css_contents = '\/* CSS code for the Google Fonts module *\/' . 
-                  PHP_EOL . 
-                  variable_get("google_fonts_css_contents", '');
-                  
   // Now add it to the list of CSS files to be loaded
   drupal_add_css(
-    _google_fonts_cache($css_contents), 
+    _google_fonts_cache(variable_get("google_fonts_css_contents", '')), 
     array('type' => 'file', 'every_page' => TRUE, 'group' => CSS_THEME)
   );
 }
@@ -85,9 +88,9 @@ function _google_fonts_load_css($fonts_to_load, $chunksize = 15) {
  * Provides all needed details about Google fonts.
  * Thanks at @sreynen to provide this array in his @font-your-face module
  */
-function _google_fonts_available_fonts() {
+function _google_fonts_available_fonts($reset = FALSE) {
   $fontsbuffer = variable_get('google_fonts_webfonts', array());
-  if (empty($fontsbuffer)) {
+  if (empty($fontsbuffer) || $reset) {
     // Return the JSON object with all available fonts
     // For now, it uses my (BarisW) API key
     
@@ -95,13 +98,26 @@ function _google_fonts_available_fonts() {
     // be sufficient as it is only used when selecting fonts in the
     // admin interface. After that, it's cached in Drupal.
     $result = drupal_http_request('https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBgeqKlFdYj3Y7VwmrEXnXzpnx5TfKXG4o');
-    if ($result->status_message != 'OK') {
-      return FALSE;
+    if ($result->code == 0) {
+      drupal_set_message(t('The list of Google Fonts could not be fetched. Verify that your server can connect the Google Servers (https://www.googleapis.com/).<br />Error: %error', array('%error' => $result->error)), 'error');
     }
-    $fontsbuffer = json_decode($result->data);
-    variable_set('google_fonts_webfonts', $fontsbuffer->items);
+    else if (isset($result->data)) {
+      $fontsbuffer = json_decode($result->data);
+      variable_set('google_fonts_webfonts', $fontsbuffer->items);
+    }
   }
   return $fontsbuffer;
+}
+
+/**
+ * Trigger to reset the locally stored variable and fetch a new font list
+ */
+function _google_fonts_update_font_list() {
+  $fonts = _google_fonts_available_fonts(TRUE);
+  if (!empty($fonts)) {
+    drupal_set_message(t('A new list of fonts have been fetched.'));
+  }
+  drupal_goto('admin/config/system/google_fonts');
 }
 
 /**
@@ -182,14 +198,19 @@ function _google_fonts_filter_enabled_fonts($value) {
  */
 function _google_fonts_cache($file_contents, $reset = FALSE) {
   
-  $directory = file_build_uri('google_fonts');
-  $file_destination = $directory . '/google_fonts.css';
-  
-  if (!file_exists($file_destination) || $reset) {
-    // Check that the files directory is writable
-    if (file_prepare_directory($directory, FILE_CREATE_DIRECTORY)) {
-      return file_unmanaged_save_data($file_contents, $file_destination, FILE_EXISTS_REPLACE);
-    }
+  $file_destination = 'public://google_fonts.css';
+
+  if ((!file_exists($file_destination) || $reset) && !empty($file_contents)) {
+    // Append a comment in the CSS code
+    $file_contents = '/* CSS code for the Google Fonts module */' . PHP_EOL . $file_contents;
+
+    // Save as a file (unmanaged) and return it
+    $file = file_unmanaged_save_data($file_contents, $file_destination, FILE_EXISTS_REPLACE);
+    
+    // Set standard file permissions for webserver-generated files.
+    drupal_chmod($file);
+    
+    return TRUE;
   }
   else {
     return $file_destination;

@@ -18,7 +18,7 @@ function google_fonts_uninstall() {
 }
 
 /**
- * Change the google_fonts array to the new format
+ * Change the google_fonts array of enabled fonts to the new format
  */
 function google_fonts_update_7100() {
   $ret = array();

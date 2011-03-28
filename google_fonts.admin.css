@@ -9,10 +9,13 @@
 .google_fonts_admin_form .disabled_fonts .form-item { 
   margin-bottom: 20px; 
 }
+.google_fonts_admin_form .disabled_fonts .fieldset-description {
+  margin-bottom: 1em;
+}
 .google_fonts_admin_form .font_example{ 
   font-size: 30px;
-  vertical-align: middle; 
-  padding-left:10px; 
+  padding-left:10px;
+  vertical-align: bottom;
 }
 .google_fonts_admin_form .enabled_fonts .font_example {
   float: right;
@@ -22,28 +25,24 @@
 .google_fonts_admin_form .disabled_fonts .font_example {
   cursor: pointer;  
 }
-
-.google_fonts_admin_form span.variants,
-.google_fonts_admin_form span.subsets {
-  vertical-align: middle;
-  margin-left: 10px;
-  padding: 3px 5px;
+.google_fonts_admin_form span.variants span{
+  vertical-align: bottom;
+  background-color: #888;
+  color: #fff;
+  font-weight: bold;
   -moz-border-radius: 3px;
   border-radius: 3px;
-}
-.google_fonts_admin_form span.variants {
-  background-color: #888;
-  color: #ccc;
-}
-.google_fonts_admin_form span.variants span{
-  font-weight: bold;
-  color: #fff;  
+  padding: 3px 6px 2px;
 }
 .google_fonts_admin_form span.subsets {
-  background-color: #ccc;
-  color: #555;
+  margin-left: 10px;
+  margin-right: 5px;
 }
-.google_fonts_admin_form span.subsets span {
-  font-weight: bold;
-  color: #000;
+.google_fonts_admin_form span.subsets img {
+  background-color: #6b90da;
+  vertical-align: bottom;
+  margin-right: 3px;
+  padding: 1px 2px 2px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
 }

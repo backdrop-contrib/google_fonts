@@ -25,6 +25,7 @@ function google_fonts_admin_settings_form($form, &$form_state) {
 
   /* Load all fonts in CSS to display their example */
   $style_to_add = '';
+  $fonts_to_load = array();
   foreach ($all_fonts as $font) {
     $current_font_path = _google_fonts_family_pathname($font->family);
     $current_array_key = _google_fonts_family_array_key_encode($font->family);
@@ -88,15 +89,15 @@ function google_fonts_admin_settings_form($form, &$form_state) {
         
         $key . '_variants' => array(
           '#type' => 'checkboxes', 
-          '#options' => _google_fonts_admin_array_values($font->variants),
+          '#options' => _google_fonts_format_variants(_google_fonts_admin_array_values($font->variants)),
           '#title' => t('Variants'),
           '#required' => TRUE,
           '#default_value' => $enabled_fonts[$key]['variants'],
         ),
-
+        
         $key . '_subsets' => array(
           '#type' => 'radios', 
-          '#options' => _google_fonts_admin_array_values($font->subsets),
+          '#options' => _google_fonts_format_subsets(_google_fonts_admin_array_values($font->subsets)),
           '#title' => t('Subsets'),
           '#required' => TRUE,
           '#default_value' => $enabled_fonts[$key]['subsets'],
@@ -115,13 +116,13 @@ function google_fonts_admin_settings_form($form, &$form_state) {
     $form['google_fonts_fieldset_enabled_fonts']['css_code'] = array(
       '#type' => 'textarea',
       '#title' => t('CSS code'),
-      '#description' => t('The module applies CSS code for you automatically if you add it here.<br />This could be useful if you don\'t use a custom theme or if you don\'t have access to it.<br />Example: !code', array('!code' => '<code>h1#overlay-title { font-family: "' . $first_family . '"; font-size: 3em; }</code>')),
+      '#description' => t('The module applies CSS code for you automatically if you add it here.<br />This could be useful if you don\'t use a custom theme or if you don\'t have access to it.<br />Example: !code', array('!code' => '<code>h1#site-name { font-family: "' . $first_family . '"; font-size: 3em; }</code>')),
       '#resizable' => FALSE,
       '#cols' => 80,
       '#default_value' => variable_get('google_fonts_css_contents', ''),
     );
   }
-  else {
+  else if (!empty($all_fonts)){
     drupal_set_message(t('No Google Fonts have been enabled yet. Please enable one or more Google Fonts below.'), 'status');
   }
   
@@ -131,6 +132,7 @@ function google_fonts_admin_settings_form($form, &$form_state) {
     $form['google_fonts_fieldset_disabled_fonts'] = array(
       '#type' => 'fieldset',
       '#title' => t('Available Google Fonts'),
+      '#description' => t('This list of available fonts is fetched once and then cached locally. To retrieve the newest fonts, you can <a href="@link">update this list</a>.', array('@link' => url('admin/config/system/google_fonts/update'))),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
       '#attributes' => array('class' => array('disabled_fonts')),
@@ -142,7 +144,7 @@ function google_fonts_admin_settings_form($form, &$form_state) {
       '#options' => $form_options['disabled'],
     );
   }
-  else {
+  else if (!empty($all_fonts)) {
     drupal_set_message(t('All available Google Fonts have been enabled.'), 'status');
   }
   
@@ -213,16 +215,40 @@ function google_fonts_admin_settings_form_submit($form, &$form_state) {
  * Returns the font family name, including a span with added styling
  */
 function _google_fonts_admin_font_example($font, $display_with_icons = TRUE) {
+  $module_path = base_path() . drupal_get_path('module', 'google_fonts');
   $class_name = _google_fonts_family_array_key_encode($font->family);
   $example = '<span class="' . $class_name . ' font_example">' . $font->family . '</span>';
   
   if ($display_with_icons) {
-    if (sizeof($font->variants) > 1) {
-      $example .= '<span class="variants">' . t('<span>@count</span> variants', array('@count' => sizeof($font->variants))) . '</span>';
+    
+    // Add the subset icons
+    $example .= '<span class="subsets">';
+    foreach ($font->subsets as $subset) {
+      switch ($subset) {
+        /* To prevent double icons, we can ignore the extended subsets */
+        case 'cyrillic-ext':
+        case 'greek-ext':
+        case 'latin-ext':
+          break;
+          
+        case 'cyrillic':
+          $example .= '<img src="' . $module_path . '/icons/cyrillic.png" alt="Cyrillic" title="'. t('Available for the @subset character range', array('@subset' => 'cyrillic')). '" />';
+          break;
+          
+        case 'greek':
+          $example .= '<img src="' . $module_path . '/icons/greek.png" alt="Greek" title="'. t('Available for the @subset character range', array('@subset' => 'greek')). '" />';
+          break;
+          
+        default:
+          $example .= '<img src="' . $module_path . '/icons/latin.png" alt="Latin" title="'. t('Available for the @subset character range', array('@subset' => 'latin')). '" />';
+          break;
+      }
     }
-
-    if (sizeof($font->subsets) > 1) {
-      $example .= '<span class="subsets">' . t('<span>@count</span> subsets (@subsets)', array('@count' => sizeof($font->subsets), '@subsets' => implode(', ', $font->subsets))) . '</span>';
+    $example .= '</span>';
+    
+    // Add variant descriptions
+    if (sizeof($font->variants) > 1) {
+      $example .= '<span class="variants">' . t('<span>@count</span> variants (@variants)', array('@count' => sizeof($font->variants), '@variants' => implode(', ', $font->variants))) . '</span>';
     }
   }
   
@@ -238,4 +264,30 @@ function _google_fonts_admin_array_values($array_in) {
     $array_out[$value] = $value;
   }
   return $array_out;
+}
+
+/** 
+ * Return an array with formatted variants (eg: change bolditalic into Bold/Italic)
+ */
+function _google_fonts_format_variants($variants) {
+  foreach ($variants as $key => $variant) {
+    switch ($variant) {
+      case 'bolditalic':
+        $variants[$key] = 'Bold/Italic';
+        break;
+      default:
+        $variants[$key] = ucfirst($variant);
+    }
+  }
+  return $variants;
+}
+
+/** 
+ * Return an array with formatted subsets (eg: change latin-ext into Latin Extended)
+ */
+function _google_fonts_format_subsets($subsets) {
+  foreach ($subsets as $key => $subset) {
+    $subsets[$key] = ucfirst(str_replace('-ext', ' extended', $subset));
+  }
+  return $subsets;
 }
