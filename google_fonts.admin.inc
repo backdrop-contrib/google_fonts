@@ -248,7 +248,7 @@ function _google_fonts_admin_font_example($font, $display_with_icons = TRUE) {
     
     // Add variant descriptions
     if (sizeof($font->variants) > 1) {
-      $example .= '<span class="variants">' . t('<span>@count</span> variants (@variants)', array('@count' => sizeof($font->variants), '@variants' => implode(', ', $font->variants))) . '</span>';
+      $example .= '<span class="variants">' . t('<span>@count</span> variants (@variants)', array('@count' => sizeof($font->variants), '@variants' => implode(', ', _google_fonts_format_variants($font->variants)))) . '</span>';
     }
   }
   
