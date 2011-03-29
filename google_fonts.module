@@ -101,7 +101,7 @@ function _google_fonts_available_fonts($reset = FALSE) {
     if ($result->code == 0) {
       drupal_set_message(t('The list of Google Fonts could not be fetched. Verify that your server can connect the Google Servers (https://www.googleapis.com/).<br />Error: %error', array('%error' => $result->error)), 'error');
     }
-    else if (isset($result->data)) {
+    elseif (isset($result->data)) {
       $fontsbuffer = json_decode($result->data);
       variable_set('google_fonts_webfonts', $fontsbuffer->items);
     }

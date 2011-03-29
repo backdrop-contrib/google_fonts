@@ -65,10 +65,10 @@ function google_fonts_admin_settings_form($form, &$form_state) {
       if (isset($enabled_fonts[$key]['variants'])) {
         $enabled_fonts[$key]['variants'] = _google_fonts_admin_array_values($enabled_fonts[$key]['variants']);
       }
-      else if (array_search('general', $font->variants)) {
+      elseif (array_search('general', $font->variants)) {
         $enabled_fonts[$key]['variants'] = array('general', 'general');
       }
-      else if (array_search('400', $font->variants)) {
+      elseif (array_search('400', $font->variants)) {
         // a weight of 400 is usally the default when there is no general
         $enabled_fonts[$key]['variants'] = array('400', '400');
       }
@@ -82,7 +82,7 @@ function google_fonts_admin_settings_form($form, &$form_state) {
       $form['google_fonts_fieldset_enabled_fonts'][$key] = array(
         
         '#type' => 'fieldset',
-        '#title' => $font->family,
+        '#title' => check_plain($font->family),
         '#collapsible' => FALSE,
         '#collapsed' => FALSE,
         '#description' => _google_fonts_admin_font_example($font, FALSE),
@@ -122,7 +122,7 @@ function google_fonts_admin_settings_form($form, &$form_state) {
       '#default_value' => variable_get('google_fonts_css_contents', ''),
     );
   }
-  else if (!empty($all_fonts)){
+  elseif (!empty($all_fonts)) {
     drupal_set_message(t('No Google Fonts have been enabled yet. Please enable one or more Google Fonts below.'), 'status');
   }
   
@@ -144,7 +144,7 @@ function google_fonts_admin_settings_form($form, &$form_state) {
       '#options' => $form_options['disabled'],
     );
   }
-  else if (!empty($all_fonts)) {
+  elseif (!empty($all_fonts)) {
     drupal_set_message(t('All available Google Fonts have been enabled.'), 'status');
   }
   
@@ -171,7 +171,7 @@ function google_fonts_admin_settings_form_submit($form, &$form_state) {
       // Strip out unchecked font variants
       foreach ($form_state['values'][$font_key . '_variants'] as $variant_key => $variant) {
         if (!$variant) {
-          unset ($form_state['values'][$font_key . '_variants'][$variant_key]);
+          unset($form_state['values'][$font_key . '_variants'][$variant_key]);
         }
       }
       
@@ -232,15 +232,15 @@ function _google_fonts_admin_font_example($font, $display_with_icons = TRUE) {
           break;
           
         case 'cyrillic':
-          $example .= '<img src="' . $module_path . '/icons/cyrillic.png" alt="Cyrillic" title="'. t('Available for the @subset character range', array('@subset' => 'cyrillic')). '" />';
+          $example .= '<img src="' . $module_path . '/icons/cyrillic.png" alt="Cyrillic" title="' . t('Available for the @subset character range', array('@subset' => 'cyrillic')) . '" />';
           break;
           
         case 'greek':
-          $example .= '<img src="' . $module_path . '/icons/greek.png" alt="Greek" title="'. t('Available for the @subset character range', array('@subset' => 'greek')). '" />';
+          $example .= '<img src="' . $module_path . '/icons/greek.png" alt="Greek" title="' . t('Available for the @subset character range', array('@subset' => 'greek')) . '" />';
           break;
           
         default:
-          $example .= '<img src="' . $module_path . '/icons/latin.png" alt="Latin" title="'. t('Available for the @subset character range', array('@subset' => 'latin')). '" />';
+          $example .= '<img src="' . $module_path . '/icons/latin.png" alt="Latin" title="' . t('Available for the @subset character range', array('@subset' => 'latin')) . '" />';
           break;
       }
     }
@@ -276,7 +276,7 @@ function _google_fonts_format_variants($variants) {
         $variants[$key] = 'Bold/Italic';
         break;
       default:
-        $variants[$key] = ucfirst($variant);
+        $variants[$key] = ucfirst(check_plain($variant));
     }
   }
   return $variants;
@@ -287,7 +287,7 @@ function _google_fonts_format_variants($variants) {
  */
 function _google_fonts_format_subsets($subsets) {
   foreach ($subsets as $key => $subset) {
-    $subsets[$key] = ucfirst(str_replace('-ext', ' extended', $subset));
+    $subsets[$key] = ucfirst(str_replace('-ext', ' extended', check_plain($subset)));
   }
   return $subsets;
 }

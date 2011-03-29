@@ -26,8 +26,8 @@ function google_fonts_update_7100() {
   $all_fonts = _google_fonts_available_fonts();
   $enabled_fonts = variable_get('google_fonts_enabled_fonts', array());
   $enabled = array();
-  foreach($all_fonts as $font) {
-    foreach($font->variants as $variant) {
+  foreach ($all_fonts as $font) {
+    foreach ($font->variants as $variant) {
       $formatted_variant = ($variant == 'bolditalic') ? 'bold italic' : $variant;
       $key = ($variant == 'regular') ? $font->family : $font->family . ' ' . $variant;
       if (!empty($enabled_fonts[$key])) {
