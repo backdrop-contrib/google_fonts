@@ -16,29 +16,33 @@ function google_fonts_admin_settings_form($form, &$form_state) {
     '#attributes' => array('class' => array('google_fonts_admin_form')),
   );
   $form['introduction'] = array(
-    '#markup' => t('Select the fonts that you want to be available on your website. Keep in mind that each font takes some time to download. For the best performance, only enable fonts that you are actually using on your website. More information about these fonts is available on the <a href="!link">Google font directory</a>.', array('!link' => 'http://code.google.com/webfonts')),
+    '#markup' => '<p>' . t('Select the fonts that you want to be available on your website. Keep in mind that each font takes some time to download. For the best performance, only enable fonts that you are actually using on your website. More information about these fonts is available on the <a href="!link">Google font directory</a>.', array('!link' => 'http://code.google.com/webfonts')) . '</p>',
   );
   
   $all_fonts = _google_fonts_available_fonts();
+
   $form_options = array('enabled' => array(), 'disabled' => array());
   $enabled_fonts = variable_get('google_fonts_enabled_fonts', array());
-
+  
   /* Load all fonts in CSS to display their example */
   $style_to_add = '';
   $fonts_to_load = array();
   foreach ($all_fonts as $font) {
-    $current_font_path = _google_fonts_family_pathname($font->family);
-    $current_array_key = _google_fonts_family_array_key_encode($font->family);
     
-    $style_to_add .= '.' . _google_fonts_family_array_key_encode($font->family) . '{ font-family: "' . $font->family . '"; } ' . PHP_EOL;
-    $fonts_to_load[] = $current_font_path;
+    if (isset($font->family)) {
+      $current_font_path = _google_fonts_family_pathname($font->family);
+      $current_array_key = _google_fonts_family_array_key_encode($font->family);
+      $style_to_add .= '.' . $current_array_key . '{ font-family: "' . $font->family . '"; } ' . PHP_EOL;
+      $fonts_to_load[] = $current_font_path;
+      
+      if (!empty($enabled_fonts[$current_array_key])) {
+        $form_options['enabled'][] = $font;
+      }
+      else {
+        $form_options['disabled'][$current_array_key] = _google_fonts_admin_font_example($font);
+      }
+    }
     
-    if (isset($enabled_fonts[$current_array_key])) {
-      $form_options['enabled'][] = $font;
-    }
-    else {
-      $form_options['disabled'][$current_array_key] = _google_fonts_admin_font_example($font);
-    }
   }
   _google_fonts_load_css($fonts_to_load);
   drupal_add_css($style_to_add, 'inline');
@@ -76,9 +80,9 @@ function google_fonts_admin_settings_form($form, &$form_state) {
         // Get the first variant (array_shift) to be selected as default
         $enabled_fonts[$key]['variants'] = array(array_shift(_google_fonts_admin_array_values($font->variants)));
       }
-
-      $enabled_fonts[$key]['subsets'] = isset($enabled_fonts[$key]['subsets']) ? $enabled_fonts[$key]['subsets'] : 'latin';
       
+      $enabled_fonts[$key]['subsets'] = isset($enabled_fonts[$key]['subsets']) ? $enabled_fonts[$key]['subsets'] : key($font->subsets);
+
       $form['google_fonts_fieldset_enabled_fonts'][$key] = array(
         
         '#type' => 'fieldset',
@@ -207,7 +211,8 @@ function google_fonts_admin_settings_form_submit($form, &$form_state) {
       drupal_set_message(t('Could not generate the CSS code for the Google Fonts.'), 'error');
     }
   }
-  
+  // Clear the current messages (to prevent an unneeded 'No Google Fonts have been enabled' message)
+  drupal_get_messages('status');
   drupal_set_message(t('Configuration saved'), 'status');
 }
 
@@ -219,7 +224,7 @@ function _google_fonts_admin_font_example($font, $display_with_icons = TRUE) {
   $class_name = _google_fonts_family_array_key_encode($font->family);
   $example = '<span class="' . $class_name . ' font_example">' . $font->family . '</span>';
   
-  if ($display_with_icons) {
+  if ($display_with_icons && isset($font->subsets)) {
     
     // Add the subset icons
     $example .= '<span class="subsets">';
@@ -229,6 +234,7 @@ function _google_fonts_admin_font_example($font, $display_with_icons = TRUE) {
         case 'cyrillic-ext':
         case 'greek-ext':
         case 'latin-ext':
+        case 'khmer-ext':
           break;
           
         case 'cyrillic':
@@ -238,7 +244,15 @@ function _google_fonts_admin_font_example($font, $display_with_icons = TRUE) {
         case 'greek':
           $example .= '<img src="' . $module_path . '/icons/greek.png" alt="Greek" title="' . t('Available for the @subset character range', array('@subset' => 'greek')) . '" />';
           break;
-          
+        
+        case 'khmer':
+          $example .= '<img src="' . $module_path . '/icons/khmer.png" alt="Khmer" title="' . t('Available for the @subset character range', array('@subset' => 'khmer')) . '" />';
+          break;
+        
+        case 'vietnamese':
+          $example .= '<img src="' . $module_path . '/icons/vietnamese.png" alt="Vietnamese" title="' . t('Available for the @subset character range', array('@subset' => 'vietnamese')) . '" />';
+          break;
+        
         default:
           $example .= '<img src="' . $module_path . '/icons/latin.png" alt="Latin" title="' . t('Available for the @subset character range', array('@subset' => 'latin')) . '" />';
           break;
