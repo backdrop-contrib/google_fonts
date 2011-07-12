@@ -41,7 +41,7 @@ function google_fonts_init() {
 
   // Check if Google Fonts array has been converted yet
   $google_fonts_version = db_query("SELECT schema_version FROM {system} WHERE name = :name", array(':name' => 'google_fonts'))->fetchField();
-  if ($google_fonts_version < 7100 && user_access('administer software updates')) {
+  if ($google_fonts_version && $google_fonts_version < 7100 && user_access('administer software updates')) {
     drupal_set_message(t('You need to run the <a href="@link">update script</a> to perform required database updates.', array('@link' => url('update.php'))), 'error');
     return;
   }
@@ -130,11 +130,11 @@ function _google_fonts_system_fontname($string) {
   return str_replace(' ', '_', $string);
 }
 
-function _google_fonts_family_pathname($family, $variants = NULL, $subset = NULL) {
+function _google_fonts_family_pathname($family, $variants = NULL, $subsets = NULL) {
   $string = str_replace(' ', '+', $family);
   
   if ($variants) {
-    if (sizeof($variants) == 1 && isset($variants['regular'])) {
+    if (is_array($variants) && sizeof($variants) == 1 && isset($variants['regular'])) {
       unset($variants['regular']);
     }
     if ($variants) {
@@ -143,8 +143,14 @@ function _google_fonts_family_pathname($family, $variants = NULL, $subset = NULL
   }
   
   // for latin, we don't need to declare a subset. 
-  if ($subset && $subset != 'latin') {
-    $string .= '&subset=' . $subset;
+  if (!empty($subsets)) {
+    $string .= '&subset=';
+    foreach((array) $subsets as $subset) {
+      if (!empty($subset)) {
+        $string .= $subset . ',';
+      }
+    }
+    $string = substr($string, 0, -1);
   }
   
   return $string;

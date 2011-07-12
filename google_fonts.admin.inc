@@ -65,7 +65,7 @@ function google_fonts_admin_settings_form($form, &$form_state) {
     foreach ($form_options['enabled'] as $font) {  
       
       $key = _google_fonts_family_array_key_encode($font->family);
-      
+
       if (isset($enabled_fonts[$key]['variants'])) {
         $enabled_fonts[$key]['variants'] = _google_fonts_admin_array_values($enabled_fonts[$key]['variants']);
       }
@@ -80,8 +80,8 @@ function google_fonts_admin_settings_form($form, &$form_state) {
         // Get the first variant (array_shift) to be selected as default
         $enabled_fonts[$key]['variants'] = array(array_shift(_google_fonts_admin_array_values($font->variants)));
       }
-      
-      $enabled_fonts[$key]['subsets'] = isset($enabled_fonts[$key]['subsets']) ? $enabled_fonts[$key]['subsets'] : key($font->subsets);
+
+      $enabled_fonts[$key]['subsets'] = isset($enabled_fonts[$key]['subsets']) ? (array) $enabled_fonts[$key]['subsets'] : array(key(_google_fonts_admin_array_values($font->subsets)));
 
       $form['google_fonts_fieldset_enabled_fonts'][$key] = array(
         
@@ -100,7 +100,7 @@ function google_fonts_admin_settings_form($form, &$form_state) {
         ),
         
         $key . '_subsets' => array(
-          '#type' => 'radios', 
+          '#type' => 'checkboxes', 
           '#options' => _google_fonts_format_subsets(_google_fonts_admin_array_values($font->subsets)),
           '#title' => t('Subsets'),
           '#required' => TRUE,
@@ -120,7 +120,7 @@ function google_fonts_admin_settings_form($form, &$form_state) {
     $form['google_fonts_fieldset_enabled_fonts']['css_code'] = array(
       '#type' => 'textarea',
       '#title' => t('CSS code'),
-      '#description' => t('The module applies CSS code for you automatically if you add it here.<br />This could be useful if you don\'t use a custom theme or if you don\'t have access to it.<br />Example: !code', array('!code' => '<code>h1#site-name { font-family: "' . $first_family . '"; font-size: 3em; }</code>')),
+      '#description' => t('The module applies CSS code for you automatically if you add it here.<br />This could be useful if you don\'t use a custom theme or if you don\'t have access to it.<br />Example: !code', array('!code' => '<code>#site-name { font-family: "' . $first_family . '"; font-size: 3em; }</code>')),
       '#resizable' => FALSE,
       '#cols' => 80,
       '#default_value' => variable_get('google_fonts_css_contents', ''),
@@ -297,7 +297,7 @@ function _google_fonts_format_variants($variants) {
 }
 
 /** 
- * Return an array with formatted subsets (eg: change latin-ext into Latin Extended)
+ * Return an array with formatted subsets (eg: change latin-ext into Latin extended)
  */
 function _google_fonts_format_subsets($subsets) {
   foreach ($subsets as $key => $subset) {
