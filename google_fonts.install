@@ -14,8 +14,8 @@ function google_fonts_install() {
  */
 function google_fonts_uninstall() {
   variable_del('google_fonts_enabled_fonts');
-  variable_del('google_fonts_css_contents');
   variable_del('google_fonts_webfonts');
+	_google_fonts_delete_cache();
 }
 
 /**

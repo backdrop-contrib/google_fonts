@@ -224,3 +224,22 @@ function _google_fonts_cache($file_contents, $reset = FALSE) {
     return $file_destination;
   }
 }
+
+/**
+ * Deletes the CSS file
+ */
+function _google_fonts_delete_cache() {
+  
+  $file_destination = 'public://google_fonts.css';
+	variable_del('google_fonts_css_contents');
+	
+  if (file_exists($file_destination)) {
+    if(drupal_unlink($file_destination)) {
+			return TRUE;
+		}
+    else {
+      return FALSE;
+		}
+  }
+
+}

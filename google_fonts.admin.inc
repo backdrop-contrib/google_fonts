@@ -198,10 +198,10 @@ function google_fonts_admin_settings_form_submit($form, &$form_state) {
 
   // Save the font settings to the database
   variable_set('google_fonts_enabled_fonts', $enabled_fonts);
-  
+
   // Save the CSS code. If left empty, just delete the existing variable
-  if (empty($form_state['values']['css_code'])) {
-    variable_del('google_fonts_css_contents');
+  if (empty($form_state['values']['css_code']) || empty($enabled_fonts)) {
+		_google_fonts_delete_cache();
   }
   else {
     variable_set('google_fonts_css_contents', $form_state['values']['css_code']);
