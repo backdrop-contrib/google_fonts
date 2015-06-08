@@ -1,9 +1,6 @@
 name = Google Fonts
 description = Make use of Open Source fonts using the <a href="http://code.google.com/apis/webfonts/">Google Fonts API</a>
-core = 7.x
-
-files[] = google_fonts.module
-files[] = google_fonts.admin.inc
-files[] = google_fonts.install
+backdrop = 1.x
+type = module
 
 configure = admin/config/system/google_fonts
