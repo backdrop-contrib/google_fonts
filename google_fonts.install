@@ -6,7 +6,7 @@
  */
 
 function google_fonts_install() {
-  drupal_set_message(st('To use the Google Fonts on your website, your have to <a href="!settings_link">select which ones to use</a>.', array('!settings_link' => url('admin/config/system/google_fonts'))));
+  drupal_set_message(t('To use the Google Fonts on your website, your have to <a href="!settings_link">select which ones to use</a>.', array('!settings_link' => url('admin/config/system/google_fonts'))));
 }
 
 /**
@@ -14,4 +14,21 @@ function google_fonts_install() {
  */
 function google_fonts_update_last_removed() {
   return 7100;
+}
+
+/**
+ * Move Google Fonts settings from variables to config.
+ */
+function google_fonts_update_1000() {
+  // Migrate variables to config.
+  $config = config('google_fonts.settings');
+  $config->set('google_fonts_css_contents', update_variable_get('google_fonts_css_contents'), '');
+  $config->set('google_fonts_webfonts', update_variable_get('google_fonts_webfonts', array()));
+  $config->set('google_fonts_enabled_fonts', update_variable_get('google_fonts_enabled_fonts', array()));
+  $config->save();
+
+  // Delete variables.
+  update_variable_del('google_fonts_css_contents');
+  update_variable_del('google_fonts_webfonts');
+  update_variable_del('google_fonts_enabled_fonts');
 }

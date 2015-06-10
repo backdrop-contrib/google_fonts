@@ -10,31 +10,28 @@
  */
 function google_fonts_admin_settings_form($form, &$form_state) {
   
-  drupal_add_css(drupal_get_path('module', 'google_fonts') . '/google_fonts.admin.css');
+  backdrop_add_css(backdrop_get_path('module', 'google_fonts') . '/google_fonts.admin.css');
   
   $form = array(
     '#attributes' => array('class' => array('google_fonts_admin_form')),
   );
   $form['introduction'] = array(
-    '#markup' => '<p>' . t('Select the fonts that you want to be available on your website. Keep in mind that each font takes some time to download. For the best performance, only enable fonts that you are actually using on your website. More information about these fonts is available on the <a href="!link">Google font directory</a>.', array('!link' => 'http://code.google.com/webfonts')) . '</p>',
+    '#markup' => '<p>' . t('Select the fonts that you want to be available on your website. Keep in mind that each font takes some time to download. For the best performance, only enable fonts that you are actually using on your website. More information about these fonts is available on the <a href="!link">Google font directory</a>.', array('!link' => 'http://developers.google.com/fonts')) . '</p>',
   );
-  
-  $all_fonts = _google_fonts_available_fonts();
 
+  $all_fonts = _google_fonts_available_fonts();
   $form_options = array('enabled' => array(), 'disabled' => array());
-  $enabled_fonts = variable_get('google_fonts_enabled_fonts', array());
+  $enabled_fonts = config_get('google_fonts.settings','google_fonts_enabled_fonts');
   
   /* Load all fonts in CSS to display their example */
   $style_to_add = '';
   $fonts_to_load = array();
   foreach ($all_fonts as $font) {
-    
     if (isset($font->family)) {
       $current_font_path = _google_fonts_family_pathname($font->family);
       $current_array_key = _google_fonts_family_array_key_encode($font->family);
       $style_to_add .= '.' . $current_array_key . '{ font-family: "' . $font->family . '"; } ' . PHP_EOL;
       $fonts_to_load[] = $current_font_path;
-      
       if (!empty($enabled_fonts[$current_array_key])) {
         $form_options['enabled'][] = $font;
       }
@@ -42,14 +39,13 @@ function google_fonts_admin_settings_form($form, &$form_state) {
         $form_options['disabled'][$current_array_key] = _google_fonts_admin_font_example($font);
       }
     }
-    
   }
+
   _google_fonts_load_css($fonts_to_load);
-  drupal_add_css($style_to_add, 'inline');
+  backdrop_add_css($style_to_add, 'inline');
 
   /* Check if there are any enabled fonts, otherwise don't create the fieldset and display a message*/
   if (!empty($form_options['enabled'])) {
-    
     $form['google_fonts_fieldset_enabled_fonts'] = array(
       '#type' => 'fieldset',
       '#title' => t('Enabled Google Fonts'),
@@ -63,24 +59,24 @@ function google_fonts_admin_settings_form($form, &$form_state) {
     );
 
     foreach ($form_options['enabled'] as $font) {  
-      
       $key = _google_fonts_family_array_key_encode($font->family);
 
       if (isset($enabled_fonts[$key]['variants'])) {
         $enabled_fonts[$key]['variants'] = _google_fonts_admin_array_values($enabled_fonts[$key]['variants']);
       }
-      elseif (array_search('general', $font->variants)) {
-        $enabled_fonts[$key]['variants'] = array('general', 'general');
+      elseif (array_search('regular', $font->variants)) {
+        $enabled_fonts[$key]['variants'] = array('regular' => 'regular');
       }
       elseif (array_search('400', $font->variants)) {
         // a weight of 400 is usally the default when there is no general
-        $enabled_fonts[$key]['variants'] = array('400', '400');
+        $enabled_fonts[$key]['variants'] = array('400' => '400');
       }
       else {
         // Get the first variant (array_shift) to be selected as default
-        $enabled_fonts[$key]['variants'] = array(array_shift(_google_fonts_admin_array_values($font->variants)));
+		$font_values = _google_fonts_admin_array_values($font->variants);
+		$first = array_shift($font_values);
+		$enabled_fonts[$key]['variants'] = array($first => $first);
       }
-
       $enabled_fonts[$key]['subsets'] = isset($enabled_fonts[$key]['subsets']) ? (array) $enabled_fonts[$key]['subsets'] : array(key(_google_fonts_admin_array_values($font->subsets)));
 
       $form['google_fonts_fieldset_enabled_fonts'][$key] = array(
@@ -114,20 +110,21 @@ function google_fonts_admin_settings_form($form, &$form_state) {
         ),
       );
     }
-    
-    // Fetch the first family name (using array_shift) to include it in the example CSS code
-    $first_family = $form_options['enabled'][array_shift(array_keys($form_options['enabled']))]->family;
+
+    // Fetch the first family name  to include it in the example CSS code
+	$first_font = array_shift($form_options['enabled']);
+	$first_family = $first_font->family;
     $form['google_fonts_fieldset_enabled_fonts']['css_code'] = array(
       '#type' => 'textarea',
       '#title' => t('CSS code'),
-      '#description' => t('The module applies CSS code for you automatically if you add it here.<br />This could be useful if you don\'t use a custom theme or if you don\'t have access to it.<br />Example: !code', array('!code' => '<code>#site-name { font-family: "' . $first_family . '"; font-size: 3em; }</code>')),
+      '#description' => t('The module applies CSS code for you automatically if you add it here.<br />This could be useful if you don\'t use a custom theme or if you don\'t have access to it.<br />Example: !code', array('!code' => '<code>h1.site-name { font-family: "' . $first_family . '"; font-size: 3em; }</code>')),
       '#resizable' => FALSE,
       '#cols' => 80,
-      '#default_value' => variable_get('google_fonts_css_contents', ''),
+      '#default_value' => config_get('google_fonts.settings','google_fonts_css_contents'),
     );
   }
   elseif (!empty($all_fonts)) {
-    drupal_set_message(t('No Google Fonts have been enabled yet. Please enable one or more Google Fonts below.'), 'status');
+    backdrop_set_message(t('No Google Fonts have been enabled yet. Please enable one or more Google Fonts below.'), 'status');
   }
   
   // Check if there are any available fonts that have not been enabled yet
@@ -149,7 +146,7 @@ function google_fonts_admin_settings_form($form, &$form_state) {
     );
   }
   elseif (!empty($all_fonts)) {
-    drupal_set_message(t('All available Google Fonts have been enabled.'), 'status');
+    backdrop_set_message(t('All available Google Fonts have been enabled.'), 'status');
   }
   
   $form['submit'] = array(
@@ -166,6 +163,7 @@ function google_fonts_admin_settings_form($form, &$form_state) {
  * Saves the fonts, CSS code and settings
  */
 function google_fonts_admin_settings_form_submit($form, &$form_state) {
+
   $enabled_fonts = array();
 
   if (isset($form_state['values']['enabled_fonts'])) {
@@ -197,30 +195,31 @@ function google_fonts_admin_settings_form_submit($form, &$form_state) {
   }
 
   // Save the font settings to the database
-  variable_set('google_fonts_enabled_fonts', $enabled_fonts);
+  config_set('google_fonts.settings','google_fonts_enabled_fonts', $enabled_fonts);
 
   // Save the CSS code. If left empty, just delete the existing variable
   if (empty($form_state['values']['css_code']) || empty($enabled_fonts)) {
 		_google_fonts_delete_cache();
   }
   else {
-    variable_set('google_fonts_css_contents', $form_state['values']['css_code']);
+    config_set('google_fonts.settings','google_fonts_css_contents', $form_state['values']['css_code']);
     
     // Save the CSS code as local file
     if (!_google_fonts_cache($form_state['values']['css_code'], TRUE)) {
-      drupal_set_message(t('Could not generate the CSS code for the Google Fonts.'), 'error');
+      backdrop_set_message(t('Could not generate the CSS code for the Google Fonts.'), 'error');
     }
   }
   // Clear the current messages (to prevent an unneeded 'No Google Fonts have been enabled' message)
-  drupal_get_messages('status');
-  drupal_set_message(t('Configuration saved'), 'status');
+  backdrop_get_messages('status');
+  backdrop_set_message(t('Configuration saved'), 'status');
 }
 
 /** 
  * Returns the font family name, including a span with added styling
  */
 function _google_fonts_admin_font_example($font, $display_with_icons = TRUE) {
-  $module_path = base_path() . drupal_get_path('module', 'google_fonts');
+
+  $module_path = base_path() . backdrop_get_path('module', 'google_fonts');
   $class_name = _google_fonts_family_array_key_encode($font->family);
   $example = '<span class="' . $class_name . ' font_example">' . $font->family . '</span>';
   
@@ -273,6 +272,7 @@ function _google_fonts_admin_font_example($font, $display_with_icons = TRUE) {
  * Return an array with the same keys as values
  */
 function _google_fonts_admin_array_values($array_in) {
+
   $array_out = array();
   foreach ($array_in as $value) {
     $array_out[$value] = $value;
@@ -284,6 +284,7 @@ function _google_fonts_admin_array_values($array_in) {
  * Return an array with formatted variants (eg: change bolditalic into Bold/Italic)
  */
 function _google_fonts_format_variants($variants) {
+
   foreach ($variants as $key => $variant) {
     switch ($variant) {
       case 'bolditalic':
@@ -300,6 +301,7 @@ function _google_fonts_format_variants($variants) {
  * Return an array with formatted subsets (eg: change latin-ext into Latin extended)
  */
 function _google_fonts_format_subsets($subsets) {
+
   foreach ($subsets as $key => $subset) {
     $subsets[$key] = ucfirst(str_replace('-ext', ' extended', check_plain($subset)));
   }
