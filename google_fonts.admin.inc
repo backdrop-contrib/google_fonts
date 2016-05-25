@@ -124,7 +124,15 @@ function google_fonts_admin_settings_form($form, &$form_state) {
     );
   }
   elseif (!empty($all_fonts)) {
-    backdrop_set_message(t('No Google Fonts have been enabled yet. Please enable one or more Google Fonts below.'), 'status');
+    backdrop_set_message(t('No Google Fonts have been enabled yet. Please enable one or more Google Fonts below.'));
+		$form['google_fonts_fieldset_disabled_fonts'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Available Google Fonts'),
+      '#description' => t('This list of available fonts is fetched once and then cached locally. To retrieve the newest fonts, you can <a href="@link">update this list</a>.', array('@link' => url('admin/config/system/google_fonts/update'))),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      '#attributes' => array('class' => array('disabled_fonts')),
+    );
   }
   
   // Check if there are any available fonts that have not been enabled yet
