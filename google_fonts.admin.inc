@@ -73,9 +73,9 @@ function google_fonts_admin_settings_form($form, &$form_state) {
       }
       else {
         // Get the first variant (array_shift) to be selected as default
-		$font_values = _google_fonts_admin_array_values($font->variants);
-		$first = array_shift($font_values);
-		$enabled_fonts[$key]['variants'] = array($first => $first);
+        $font_values = _google_fonts_admin_array_values($font->variants);
+        $first = array_shift($font_values);
+        $enabled_fonts[$key]['variants'] = array($first => $first);
       }
       $enabled_fonts[$key]['subsets'] = isset($enabled_fonts[$key]['subsets']) ? (array) $enabled_fonts[$key]['subsets'] : array(key(_google_fonts_admin_array_values($font->subsets)));
 
@@ -112,8 +112,8 @@ function google_fonts_admin_settings_form($form, &$form_state) {
     }
 
     // Fetch the first family name  to include it in the example CSS code
-	$first_font = array_shift($form_options['enabled']);
-	$first_family = $first_font->family;
+    $first_font = array_shift($form_options['enabled']);
+    $first_family = $first_font->family;
     $form['google_fonts_fieldset_enabled_fonts']['css_code'] = array(
       '#type' => 'textarea',
       '#title' => t('CSS code'),
@@ -125,7 +125,7 @@ function google_fonts_admin_settings_form($form, &$form_state) {
   }
   elseif (!empty($all_fonts)) {
     backdrop_set_message(t('No Google Fonts have been enabled yet. Please enable one or more Google Fonts below.'));
-		$form['google_fonts_fieldset_disabled_fonts'] = array(
+    $form['google_fonts_fieldset_disabled_fonts'] = array(
       '#type' => 'fieldset',
       '#title' => t('Available Google Fonts'),
       '#description' => t('This list of available fonts is fetched once and then cached locally. To retrieve the newest fonts, you can <a href="@link">update this list</a>.', array('@link' => url('admin/config/system/google_fonts/update'))),
@@ -207,7 +207,7 @@ function google_fonts_admin_settings_form_submit($form, &$form_state) {
 
   // Save the CSS code. If left empty, just delete the existing variable
   if (empty($form_state['values']['css_code']) || empty($enabled_fonts)) {
-		_google_fonts_delete_cache();
+    _google_fonts_delete_cache();
   }
   else {
     config_set('google_fonts.settings','google_fonts_css_contents', $form_state['values']['css_code']);
