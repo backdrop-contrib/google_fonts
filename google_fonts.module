@@ -12,8 +12,7 @@
 /**
  * Implements hook_menu().
  */
-function google_fonts_menu()
-{
+function google_fonts_menu() {
 
   $items = array();
 
@@ -39,8 +38,7 @@ function google_fonts_menu()
 /**
  * Implements hook_init().
  */
-function google_fonts_init()
-{
+function google_fonts_init() {
 
   // We don't need to load the fonts twice as the admin interface
   // loads ALL fonts by default already
@@ -64,8 +62,7 @@ function google_fonts_init()
   }
 }
 
-function _google_fonts_add_custom_css()
-{
+function _google_fonts_add_custom_css() {
 
   // Now add it to the list of CSS files to be loaded
   backdrop_add_css(
@@ -77,14 +74,16 @@ function _google_fonts_add_custom_css()
 /**
  * Add the CSS include to the HEAD of the page
  */
-function _google_fonts_load_css($fonts_to_load, $chunksize = 15)
-{
+function _google_fonts_load_css($fonts_to_load, $chunksize = 15) {
 
   $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
 
   $chunks = array_chunk($fonts_to_load, $chunksize);
   foreach ($chunks as $chunk) {
-    backdrop_add_css($protocol . '://fonts.googleapis.com/css?family=' . implode('|', $chunk), array('type' => 'external', 'weight' => CSS_SYSTEM));
+    backdrop_add_css($protocol . '://fonts.googleapis.com/css?family=' . implode('|', $chunk), array(
+      'type' => 'external',
+      'weight' => CSS_SYSTEM
+    ));
   }
 }
 
@@ -92,8 +91,7 @@ function _google_fonts_load_css($fonts_to_load, $chunksize = 15)
  * Provides all needed details about Google fonts.
  * Thanks at @sreynen to provide this array in his @font-your-face module
  */
-function _google_fonts_available_fonts($reset = FALSE)
-{
+function _google_fonts_available_fonts($reset = FALSE) {
   $fontslist = config_get('google_fonts.settings', 'google_fonts_webfonts');
 
   //new for Backdrop
@@ -126,7 +124,8 @@ function _google_fonts_available_fonts($reset = FALSE)
     $result = backdrop_http_request('https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBgeqKlFdYj3Y7VwmrEXnXzpnx5TfKXG4o');
     if ($result->code != 200) {
       backdrop_set_message(t('The list of Google Fonts could not be fetched. Verify that your server can connect the Google Servers (https://www.googleapis.com). Error: %error', array('%error' => $result->error)), 'error');
-    } elseif (isset($result->data)) {
+    }
+    elseif (isset($result->data)) {
 
       $fontsbuffer = json_decode($result->data);
       config_set('google_fonts.settings', 'google_fonts_webfonts', $fontsbuffer->items);
@@ -139,8 +138,7 @@ function _google_fonts_available_fonts($reset = FALSE)
 /**
  * Trigger to reset the locally stored variable and fetch a new font list
  */
-function _google_fonts_update_font_list()
-{
+function _google_fonts_update_font_list() {
   $fonts = _google_fonts_available_fonts(TRUE);
   if (!empty($fonts)) {
     backdrop_set_message(t('A new list of fonts have been fetched.'));
@@ -151,14 +149,12 @@ function _google_fonts_update_font_list()
 /**
  * Format the font name as saved in the database (underscores instead of spaces)
  */
-function _google_fonts_system_fontname($string)
-{
+function _google_fonts_system_fontname($string) {
 
   return str_replace(' ', '_', $string);
 }
 
-function _google_fonts_family_pathname($family, $variants = NULL, $subsets = NULL)
-{
+function _google_fonts_family_pathname($family, $variants = NULL, $subsets = NULL) {
 
   $string = str_replace(' ', '+', $family);
 
@@ -174,7 +170,7 @@ function _google_fonts_family_pathname($family, $variants = NULL, $subsets = NUL
   // for latin, we don't need to declare a subset. 
   if (!empty($subsets)) {
     $string .= '&subset=';
-    foreach ((array)$subsets as $subset) {
+    foreach ((array) $subsets as $subset) {
       if (!empty($subset)) {
         $string .= $subset . ',';
       }
@@ -185,13 +181,11 @@ function _google_fonts_family_pathname($family, $variants = NULL, $subsets = NUL
   return $string;
 }
 
-function _google_fonts_family_array_key_encode($string)
-{
+function _google_fonts_family_array_key_encode($string) {
   return str_replace(' ', '_', $string);
 }
 
-function _google_fonts_family_array_key_decode($string)
-{
+function _google_fonts_family_array_key_decode($string) {
   $string = str_replace('__', ':', $string);
   $string = str_replace('_', ' ', $string);
   return $string;
@@ -201,8 +195,7 @@ function _google_fonts_family_array_key_decode($string)
  * Return the path of this font
  * If it is a child font of a larger family, scan the array to determine its path
  */
-function _google_fonts_get_font_info($font, $full_font = '')
-{
+function _google_fonts_get_font_info($font, $full_font = '') {
   $available_fonts = _google_fonts_available_fonts();
   if (empty($full_font)) {
     $full_font = $font;
@@ -210,10 +203,12 @@ function _google_fonts_get_font_info($font, $full_font = '')
   if (isset($available_fonts[$font]['fonts'])) {
     if (isset($available_fonts[$font]['fonts'][$full_font])) {
       return $available_fonts[$font]['fonts'][$full_font];
-    } else {
+    }
+    else {
       return $available_fonts[$font];
     }
-  } else {
+  }
+  else {
     // Try the string without the last word to determine the parent
     $font = substr($font, 0, strrpos($font, " "));
     return _google_fonts_get_font_info($font, $full_font);
@@ -223,8 +218,7 @@ function _google_fonts_get_font_info($font, $full_font = '')
 /**
  * Filter function to filter out the disabled Google Fonts.
  */
-function _google_fonts_filter_enabled_fonts($value)
-{
+function _google_fonts_filter_enabled_fonts($value) {
   if ($value == '0') {
     return FALSE;
   }
@@ -234,8 +228,7 @@ function _google_fonts_filter_enabled_fonts($value)
 /**
  * Create the CSS file and store it locally.
  */
-function _google_fonts_cache($file_contents, $reset = FALSE)
-{
+function _google_fonts_cache($file_contents, $reset = FALSE) {
   $file_destination = 'public://google_fonts.css';
   if ((!file_exists($file_destination) || $reset) && !empty($file_contents)) {
     // Append a comment in the CSS code
@@ -248,7 +241,8 @@ function _google_fonts_cache($file_contents, $reset = FALSE)
     backdrop_chmod($file);
 
     return TRUE;
-  } else {
+  }
+  else {
     return $file_destination;
   }
 }
@@ -256,8 +250,7 @@ function _google_fonts_cache($file_contents, $reset = FALSE)
 /**
  * Deletes the CSS file
  */
-function _google_fonts_delete_cache()
-{
+function _google_fonts_delete_cache() {
 
   $file_destination = 'public://google_fonts.css';
   variable_del('google_fonts_css_contents');
@@ -265,7 +258,8 @@ function _google_fonts_delete_cache()
   if (file_exists($file_destination)) {
     if (backdrop_unlink($file_destination)) {
       return TRUE;
-    } else {
+    }
+    else {
       return FALSE;
     }
   }
@@ -275,8 +269,7 @@ function _google_fonts_delete_cache()
 /**
  * Implements hook_config_info().
  */
-function google_fonts_config_info()
-{
+function google_fonts_config_info() {
   $prefixes['google_fonts.settings'] = array(
     'label' => t('Google Fonts settings'),
     'group' => t('Configuration'),

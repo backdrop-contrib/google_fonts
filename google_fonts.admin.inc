@@ -9,9 +9,9 @@
  * Implements hook_admin_settings() for configuring the module
  */
 function google_fonts_admin_settings_form($form, &$form_state) {
-  
+
   backdrop_add_css(backdrop_get_path('module', 'google_fonts') . '/google_fonts.admin.css');
-  
+
   $form = array(
     '#attributes' => array('class' => array('google_fonts_admin_form')),
   );
@@ -21,8 +21,8 @@ function google_fonts_admin_settings_form($form, &$form_state) {
 
   $all_fonts = _google_fonts_available_fonts();
   $form_options = array('enabled' => array(), 'disabled' => array());
-  $enabled_fonts = config_get('google_fonts.settings','google_fonts_enabled_fonts');
-  
+  $enabled_fonts = config_get('google_fonts.settings', 'google_fonts_enabled_fonts');
+
   /* Load all fonts in CSS to display their example */
   $style_to_add = '';
   $fonts_to_load = array();
@@ -58,7 +58,7 @@ function google_fonts_admin_settings_form($form, &$form_state) {
       '#value' => $form_options['enabled'],
     );
 
-    foreach ($form_options['enabled'] as $font) {  
+    foreach ($form_options['enabled'] as $font) {
       $key = _google_fonts_family_array_key_encode($font->family);
 
       if (isset($enabled_fonts[$key]['variants'])) {
@@ -80,31 +80,31 @@ function google_fonts_admin_settings_form($form, &$form_state) {
       $enabled_fonts[$key]['subsets'] = isset($enabled_fonts[$key]['subsets']) ? (array) $enabled_fonts[$key]['subsets'] : array(key(_google_fonts_admin_array_values($font->subsets)));
 
       $form['google_fonts_fieldset_enabled_fonts'][$key] = array(
-        
+
         '#type' => 'fieldset',
         '#title' => check_plain($font->family),
         '#collapsible' => FALSE,
         '#collapsed' => FALSE,
         '#description' => _google_fonts_admin_font_example($font, FALSE),
-        
+
         $key . '_variants' => array(
-          '#type' => 'checkboxes', 
+          '#type' => 'checkboxes',
           '#options' => _google_fonts_format_variants(_google_fonts_admin_array_values($font->variants)),
           '#title' => t('Variants'),
           '#required' => TRUE,
           '#default_value' => $enabled_fonts[$key]['variants'],
         ),
-        
+
         $key . '_subsets' => array(
-          '#type' => 'checkboxes', 
+          '#type' => 'checkboxes',
           '#options' => _google_fonts_format_subsets(_google_fonts_admin_array_values($font->subsets)),
           '#title' => t('Subsets'),
           '#required' => TRUE,
           '#default_value' => $enabled_fonts[$key]['subsets'],
         ),
-        
+
         $key . '_enabler' => array(
-          '#type' => 'checkbox', 
+          '#type' => 'checkbox',
           '#title' => t('Disable this font'),
           '#default_value' => FALSE,
         ),
@@ -120,7 +120,7 @@ function google_fonts_admin_settings_form($form, &$form_state) {
       '#description' => t('The module applies CSS code for you automatically if you add it here.<br />This could be useful if you don\'t use a custom theme or if you don\'t have access to it.<br />Example: !code', array('!code' => '<code>h1.site-name { font-family: "' . $first_family . '"; font-size: 3em; }</code>')),
       '#resizable' => FALSE,
       '#cols' => 80,
-      '#default_value' => config_get('google_fonts.settings','google_fonts_css_contents'),
+      '#default_value' => config_get('google_fonts.settings', 'google_fonts_css_contents'),
     );
   }
   elseif (!empty($all_fonts)) {
@@ -134,7 +134,7 @@ function google_fonts_admin_settings_form($form, &$form_state) {
       '#attributes' => array('class' => array('disabled_fonts')),
     );
   }
-  
+
   // Check if there are any available fonts that have not been enabled yet
   // otherwise don't create the fieldset but display a message
   if (!empty($form_options['disabled'])) {
@@ -145,8 +145,8 @@ function google_fonts_admin_settings_form($form, &$form_state) {
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
       '#attributes' => array('class' => array('disabled_fonts')),
-    );  
-    
+    );
+
     $form['google_fonts_fieldset_disabled_fonts']['google_fonts_disabled_fonts'] = array(
       '#type' => 'checkboxes',
       '#default_value' => array(),
@@ -156,13 +156,13 @@ function google_fonts_admin_settings_form($form, &$form_state) {
   elseif (!empty($all_fonts)) {
     backdrop_set_message(t('All available Google Fonts have been enabled.'), 'status');
   }
-  
+
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save configuration'),
     '#weight' => 5,
   );
-  
+
   return $form;
 }
 
@@ -177,14 +177,14 @@ function google_fonts_admin_settings_form_submit($form, &$form_state) {
   if (isset($form_state['values']['enabled_fonts'])) {
     foreach ($form_state['values']['enabled_fonts'] as $key => $font) {
       $font_key = _google_fonts_family_array_key_encode($font->family);
-      
+
       // Strip out unchecked font variants
       foreach ($form_state['values'][$font_key . '_variants'] as $variant_key => $variant) {
         if (!$variant) {
           unset($form_state['values'][$font_key . '_variants'][$variant_key]);
         }
       }
-      
+
       // Only add the font if the enabler checkbox is not checked
       if (!$form_state['values'][$font_key . '_enabler']) {
         $enabled_fonts[$font_key] = array(
@@ -195,7 +195,7 @@ function google_fonts_admin_settings_form_submit($form, &$form_state) {
       }
     }
   }
-  
+
   foreach ($form_state['values']['google_fonts_disabled_fonts'] as $key => $font) {
     if (!empty($font)) {
       $enabled_fonts[$key] = array('family' => $font);
@@ -203,15 +203,15 @@ function google_fonts_admin_settings_form_submit($form, &$form_state) {
   }
 
   // Save the font settings to the database
-  config_set('google_fonts.settings','google_fonts_enabled_fonts', $enabled_fonts);
+  config_set('google_fonts.settings', 'google_fonts_enabled_fonts', $enabled_fonts);
 
   // Save the CSS code. If left empty, just delete the existing variable
   if (empty($form_state['values']['css_code']) || empty($enabled_fonts)) {
     _google_fonts_delete_cache();
   }
   else {
-    config_set('google_fonts.settings','google_fonts_css_contents', $form_state['values']['css_code']);
-    
+    config_set('google_fonts.settings', 'google_fonts_css_contents', $form_state['values']['css_code']);
+
     // Save the CSS code as local file
     if (!_google_fonts_cache($form_state['values']['css_code'], TRUE)) {
       backdrop_set_message(t('Could not generate the CSS code for the Google Fonts.'), 'error');
@@ -222,7 +222,7 @@ function google_fonts_admin_settings_form_submit($form, &$form_state) {
   backdrop_set_message(t('Configuration saved'), 'status');
 }
 
-/** 
+/**
  * Returns the font family name, including a span with added styling
  */
 function _google_fonts_admin_font_example($font, $display_with_icons = TRUE) {
@@ -230,9 +230,9 @@ function _google_fonts_admin_font_example($font, $display_with_icons = TRUE) {
   $module_path = base_path() . backdrop_get_path('module', 'google_fonts');
   $class_name = _google_fonts_family_array_key_encode($font->family);
   $example = '<span class="' . $class_name . ' font_example">' . $font->family . '</span>';
-  
+
   if ($display_with_icons && isset($font->subsets)) {
-    
+
     // Add the subset icons
     $example .= '<span class="subsets">';
     foreach ($font->subsets as $subset) {
@@ -243,40 +243,43 @@ function _google_fonts_admin_font_example($font, $display_with_icons = TRUE) {
         case 'latin-ext':
         case 'khmer-ext':
           break;
-          
+
         case 'cyrillic':
           $example .= '<img src="' . $module_path . '/icons/cyrillic.png" alt="Cyrillic" title="' . t('Available for the @subset character range', array('@subset' => 'cyrillic')) . '" />';
           break;
-          
+
         case 'greek':
           $example .= '<img src="' . $module_path . '/icons/greek.png" alt="Greek" title="' . t('Available for the @subset character range', array('@subset' => 'greek')) . '" />';
           break;
-        
+
         case 'khmer':
           $example .= '<img src="' . $module_path . '/icons/khmer.png" alt="Khmer" title="' . t('Available for the @subset character range', array('@subset' => 'khmer')) . '" />';
           break;
-        
+
         case 'vietnamese':
           $example .= '<img src="' . $module_path . '/icons/vietnamese.png" alt="Vietnamese" title="' . t('Available for the @subset character range', array('@subset' => 'vietnamese')) . '" />';
           break;
-        
+
         default:
           $example .= '<img src="' . $module_path . '/icons/latin.png" alt="Latin" title="' . t('Available for the @subset character range', array('@subset' => 'latin')) . '" />';
           break;
       }
     }
     $example .= '</span>';
-    
+
     // Add variant descriptions
     if (sizeof($font->variants) > 1) {
-      $example .= '<span class="variants">' . t('<span>@count</span> variants (@variants)', array('@count' => sizeof($font->variants), '@variants' => implode(', ', _google_fonts_format_variants($font->variants)))) . '</span>';
+      $example .= '<span class="variants">' . t('<span>@count</span> variants (@variants)', array(
+          '@count' => sizeof($font->variants),
+          '@variants' => implode(', ', _google_fonts_format_variants($font->variants))
+        )) . '</span>';
     }
   }
-  
+
   return $example;
 }
 
-/** 
+/**
  * Return an array with the same keys as values
  */
 function _google_fonts_admin_array_values($array_in) {
@@ -288,7 +291,7 @@ function _google_fonts_admin_array_values($array_in) {
   return $array_out;
 }
 
-/** 
+/**
  * Return an array with formatted variants (eg: change bolditalic into Bold/Italic)
  */
 function _google_fonts_format_variants($variants) {
@@ -305,7 +308,7 @@ function _google_fonts_format_variants($variants) {
   return $variants;
 }
 
-/** 
+/**
  * Return an array with formatted subsets (eg: change latin-ext into Latin extended)
  */
 function _google_fonts_format_subsets($subsets) {
