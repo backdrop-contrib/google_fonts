@@ -22,24 +22,24 @@ Administration > Configuration > Category >  Google Fonts
 and enter the required information.
 
 
-##License
+## License
 
 This project is GPL v2 software. See the LICENSE.txt file 
 in this directory for complete text.
 
-##Acknowledgements
+## Acknowledgements
 
-###Author and Maintainer for Drupal:
+### Author and Maintainer for Drupal:
 
 + Baris Wanschers (BarisW)
 
 
-###Port to Backdrop:
+### Port to Backdrop:
 
-+ Graham Oliver github.com/Graham-72
++ Graham Oliver (github.com/Graham-72)
 
 
-##Credits
+## Credits
 
 Development of the Drupal module was sponsored by 
 LimoenGroen, Amsterdam-based Drupal specialists.
