@@ -5,11 +5,9 @@ Google Font API.
 
 It is a port to BackdropCMS of the Drupal project, version 7.x-2.3.
 
-Note that the author now recommends adopting the more general 
-@font-your-face module that not only support Google Fonts, 
-but also several other font providers and combines all those fonts 
-in a very user-friendly interface. 
-
+This latest release 1.x-2.1.3 of the module for BackdropCMS adds 
+an administrative setting for the Google Webfonts API Key which is 
+needed for fetching an up-to-date listing of all available Google fonts.
 
 ## Installation
 
@@ -17,9 +15,13 @@ Install this module using the official Backdrop CMS instructions at
 https://backdropcms.org/guide/modules.
 
 Visit the configuration page at 
-Administration > Configuration > Category >  Google Fonts 
-(admin/config/category/google_fonts) 
+Administration > Configuration > System > Google Fonts 
+(admin/config/system/google_fonts) 
 and enter the required information.
+
+Please note that when fetching the listing of all available 
+Google fonts this module stores the information in its config
+file which then becomes large, nearly 900 kilobytes.
 
 
 ## License

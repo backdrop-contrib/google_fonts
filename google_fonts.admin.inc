@@ -15,8 +15,17 @@ function google_fonts_admin_settings_form($form, &$form_state) {
   $form = array(
     '#attributes' => array('class' => array('google_fonts_admin_form')),
   );
+
+  $form['google_fonts_api_key'] = array(
+    '#title' => t('The Google webfonts API key for fetching an up-to-date list of all available fonts.'),
+    '#description' => t('Use this default key or obtain and insert your own here.'),
+    '#type' => 'textfield',
+    '#default_value' => config_get('google_fonts.settings','google_fonts_api_key'),
+    '#weight' => -1,
+  );
+
   $form['introduction'] = array(
-    '#markup' => '<p>' . t('Select the fonts that you want to be available on your website. Keep in mind that each font takes some time to download. For the best performance, only enable fonts that you are actually using on your website. More information about these fonts is available on the <a href="!link">Google font directory</a>.', array('!link' => 'http://developers.google.com/fonts')) . '</p>',
+    '#markup' => '<h2>' . t('Selecting fonts:') . '</h2>' . '<p>' . t('From the list below select the fonts that you want to be available on your website. Keep in mind that each font takes some time to download. For the best performance, only enable fonts that you are actually using on your website. More information about these fonts is available on the <a href="!link">Google font directory</a>.', array('!link' => 'http://developers.google.com/fonts')) . '</p>',
   );
 
   $all_fonts = _google_fonts_available_fonts();
@@ -68,7 +77,7 @@ function google_fonts_admin_settings_form($form, &$form_state) {
         $enabled_fonts[$key]['variants'] = array('regular' => 'regular');
       }
       elseif (array_search('400', $font->variants)) {
-        // a weight of 400 is usally the default when there is no general
+        // a weight of 400 is usually the default when there is no general
         $enabled_fonts[$key]['variants'] = array('400' => '400');
       }
       else {
@@ -173,6 +182,9 @@ function google_fonts_admin_settings_form($form, &$form_state) {
 function google_fonts_admin_settings_form_submit($form, &$form_state) {
 
   $enabled_fonts = array();
+
+  $webfonts_api = $form_state['values']['google_fonts_api_key'];
+  config_set('google_fonts.settings', 'google_fonts_api_key', $webfonts_api);
 
   if (isset($form_state['values']['enabled_fonts'])) {
     foreach ($form_state['values']['enabled_fonts'] as $key => $font) {
