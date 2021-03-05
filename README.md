@@ -3,9 +3,9 @@
 This module enables you to add Google Fonts to your site using the 
 Google Font API.
 
-It is a port to BackdropCMS of the Drupal project, version 7.x-2.3.
+It is a port to Backdrop CMS of the Drupal project, version 7.x-2.3.
 
-This latest release 1.x-2.1.3 of the module for Backdrop CMS adds 
+This latest release 1.x-2.1.3 of this module for Backdrop CMS adds 
 an administrative setting for the Google Webfonts API Key which is 
 needed for fetching an up-to-date listing of all available Google fonts.
 
@@ -18,6 +18,10 @@ Visit the configuration page at
 Administration > Configuration > System > Google Fonts 
 (admin/config/system/google_fonts) 
 and enter the required information.
+
+Visit https://developers.google.com/fonts/docs/developer_api
+to obtain your own API key to replace the one included in
+this release.
 
 ## Issues
 Bugs and Feature requests should be reported in the Issue Queue:
