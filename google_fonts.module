@@ -95,7 +95,7 @@ function _google_fonts_available_fonts($reset = FALSE) {
   $fontslist = config_get('google_fonts.settings', 'google_fonts_webfonts');
 
   //new for Backdrop
-  //convert each entry into a stdClass object  
+  //convert each entry into a stdClass object
   //and build $fontsbuffer as an array of objects
 
   $fontsbuffer = array();
@@ -114,16 +114,25 @@ function _google_fonts_available_fonts($reset = FALSE) {
   }
 
   if (empty($fontsbuffer) || $reset) {
-    // Return the JSON object with all available fonts
-    // For now, it uses my (BarisW) API key
+    // Return the JSON object with all available fonts.
+    // This requires an API key for the Google webfonts service.
 
-    // This key is limited to 10.000 requests per day, which should
-    // be sufficient as it is only used when selecting fonts in the
-    // admin interface. After that, it's cached in Drupal.
+    // This is only used when selecting fonts in the
+    // admin interface. After that, the results are cached in Backdrop.
+    // Go to https://developers.google.com/fonts/docs/developer_api
+    // to obtain your own API key.
 
-    $result = backdrop_http_request('https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBgeqKlFdYj3Y7VwmrEXnXzpnx5TfKXG4o');
+    // The 'out-of-the box' setting is my (Graham-72) API key.
+    // $webfonts_api_key = 'AIzaSyDqIX-7e02ozn6JB5ADu0ZX5eTfrN2n3io';
+    // Get current API key from config.
+    $webfonts_api_key = config_get('google_fonts.settings', 'google_fonts_api_key');
+    $webfonts_uri = "https://www.googleapis.com/webfonts/v1/webfonts?key=$webfonts_api_key";
+
+    $result = backdrop_http_request($webfonts_uri);
     if ($result->code != 200) {
-      backdrop_set_message(t('The list of Google Fonts could not be fetched. Verify that your server can connect the Google Servers (https://www.googleapis.com). Error: %error', array('%error' => $result->error)), 'error');
+      backdrop_set_message(t('The list of Google Fonts could not be fetched.
+      Check that you have set a valid API key and that your server can connect the Google Servers 
+      (https://www.googleapis.com). Error: %error', array('%error' => $result->error)), 'error');
     }
     elseif (isset($result->data)) {
 
@@ -141,7 +150,7 @@ function _google_fonts_available_fonts($reset = FALSE) {
 function _google_fonts_update_font_list() {
   $fonts = _google_fonts_available_fonts(TRUE);
   if (!empty($fonts)) {
-    backdrop_set_message(t('A new list of fonts have been fetched.'));
+    backdrop_set_message(t('A new list of fonts has been fetched.'));
   }
   backdrop_goto('admin/config/system/google_fonts');
 }
@@ -167,7 +176,7 @@ function _google_fonts_family_pathname($family, $variants = NULL, $subsets = NUL
     }
   }
 
-  // for latin, we don't need to declare a subset. 
+  // for latin, we don't need to declare a subset.
   if (!empty($subsets)) {
     $string .= '&subset=';
     foreach ((array) $subsets as $subset) {

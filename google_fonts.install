@@ -32,3 +32,17 @@ function google_fonts_update_1000() {
   update_variable_del('google_fonts_webfonts');
   update_variable_del('google_fonts_enabled_fonts');
 }
+
+/**
+ *  Add a config setting for Google webfonts API key
+ */
+function google_fonts_update_1001()
+{
+  // Add a default value for the API key.
+  $existing_key = config_get('google_fonts.settings', 'google_fonts_api_key');
+  if (!isset($existing_key)) {
+    $config = config('google_fonts.settings');
+    $config->set('google_fonts_api_key', 'AIzaSyDqIX-7e02ozn6JB5ADu0ZX5eTfrN2n3io');
+    $config->save();
+  }
+}
